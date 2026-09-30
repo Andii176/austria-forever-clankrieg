@@ -94,11 +94,9 @@ def calculate(rows, current, weeks, state):
                 member['since'] = weeks[0]
         else:
             member = {'new': True, 'since': weeks[0] if history[0]['decks'] else None,
-                      'first_seen': weeks[0]}
+                      'first_seen': weeks[0], 'estimated': True}
         members[tag] = member
-        if not member['new']:
-            rated = history
-        elif member['since'] is None:
+        if member['since'] is None:
             rated = []
         elif member['since'] in weeks:
             rated = history[:weeks.index(member['since']) + 1]
@@ -113,8 +111,11 @@ def calculate(rows, current, weeks, state):
         players.append({'name': row['player_name'], 'tag': '#'+tag, 'new': member['new'],
                         'ratedWeeks': len(rated), 'points': points, 'participation': participation,
                         'lastDecks': history[0]['decks'], 'lastPoints': history[0]['points'],
-                        'lastThree': sum(h['decks'] for h in history[:3]),
-                        'category': category, 'history': history})
+                        'lastThree': sum(h['decks'] for h in rated[:3]),
+                        'category': category, 'history': history,
+                        'ratingStart': member['since'],
+                        'joinEstimated': member.get('estimated', True),
+                        'lastThreePossible': 16 * min(3, len(rated))})
     players.sort(key=lambda p: (p['points'] is None, -(p['points'] or 0),
                                 -(p['participation'] or 0), p['name'].casefold()))
     for i, p in enumerate(players):
