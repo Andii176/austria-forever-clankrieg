@@ -1,0 +1,53 @@
+name: Clankrieg aktualisieren
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      verify_only:
+        description: API-Daten mit bisheriger CSV vergleichen (ohne Veröffentlichung)
+        type: boolean
+        default: true
+  schedule:
+    - cron: '15 12 * * 1'
+      timezone: Europe/Vienna
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: clan-war-pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Offizielle Clash-Royale-Daten auswerten
+        if: github.event_name != 'push'
+        env:
+          CLASH_ROYALE_API_TOKEN: ${{ secrets.CLASH_ROYALE_API_TOKEN }}
+        run: python3 refresh.py ${{ inputs.verify_only && '--verify' || '' }}
+      - name: Neuen Datenstand speichern
+        if: github.event_name != 'push' && !inputs.verify_only
+        run: |
+          git config user.name 'Clanwar updater'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist/data.json member-state.json
+          git commit -m 'Update clan war statistics'
+          git push
+      - uses: actions/configure-pages@v5
+        if: github.event_name != 'workflow_dispatch' || !inputs.verify_only
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'workflow_dispatch' || !inputs.verify_only
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        if: github.event_name != 'workflow_dispatch' || !inputs.verify_only
