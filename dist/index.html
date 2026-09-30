@@ -16,6 +16,8 @@
       <div class="update">Clankrieg-Statistik <strong id="as-of">Stand 28.09.2026</strong></div>
     </header>
 
+    <nav class="view-nav" aria-label="Ansicht"><button type="button" id="overview-view" aria-pressed="true">Statistik & Ranking</button><button type="button" id="review-view" aria-pressed="false">Gefährdet & Beobachtung</button></nav>
+    <div id="statistics-view">
     <section class="overview" aria-label="Clanüberblick">
       <div class="overview-lead"><span class="eyebrow">AKTUELLER CLANKRIEG</span><strong id="lead-points">–</strong><span>Clanpunkte <span id="lead-delta"></span></span></div>
       <div class="stat"><span>Gespielte Decks</span><strong id="decks">–</strong><small id="decks-delta">im aktuellen Clankrieg</small></div>
@@ -40,6 +42,13 @@
       <p class="hint">Spieler antippen, um seine zehn Kriegswochen anzusehen. „Noch offen“ bedeutet, dass seit dem Neueintritt noch keine sichere Wertung möglich ist.</p>
     </section>
 
+    </div>
+    <section id="review-panel" class="panel" aria-labelledby="review-title" hidden>
+      <div class="section-head"><div><span class="eyebrow">CLANLEITUNG</span><h2 id="review-title">Gefährdet & unter Beobachtung</h2></div></div>
+      <p class="review-intro">Automatische Einschätzung anhand der abgeschlossenen Clankriege. Die Clanleitung entscheidet über Verwarnungen und Ausschlüsse. Absprachen oder entschuldigte Ausfälle sind hier nicht hinterlegt.</p>
+      <div id="review-groups"></div>
+      <details class="method review-method"><summary>So wird die Einstufung berechnet</summary><div class="method-body"><p><strong>Gefährdet:</strong> mindestens ein gewerteter CW, unter 1.200 gewichtete Punkte pro CW und weniger als zwei Drittel der möglichen Decks in den bis zu drei letzten gewerteten CW. Die Reihenfolge priorisiert die geringste Teilnahme der letzten drei Wochen, danach die geringsten gewichteten Punkte.</p><p><strong>Unter Beobachtung:</strong> mindestens ein gewerteter CW und unter 1.800 gewichtete Punkte pro CW oder weniger als zwölf Decks im letzten CW. Wer trotz kritischem Langzeitwert zuletzt mindestens zwei Drittel der möglichen Decks gespielt hat, bleibt zunächst unter Beobachtung.</p><p><strong>Neu / noch offen:</strong> noch kein sicher gewerteter CW. Neue Spieler bekommen einen abgeschlossenen CW; danach gelten dieselben Regeln. Für ihre Teilnahme zählen nur die seit Eintritt gewerteten Wochen. Die Einstufungen werden mit jedem neuen Datenstand automatisch neu berechnet.</p></div></details>
+    </section>
     <details class="method"><summary>So wird das Ranking berechnet</summary><div class="method-body"><p>Die drei neuesten Clankriege zählen je 100 %. Danach sinkt das Gewicht pro Woche auf 90, 80, 70, 60, 50, 40 und 30 %. Die gewichteten Punkte werden durch die Summe der berücksichtigten Wochengewichte geteilt. Für die Teilnahme werden die gespielten Decks mit denselben Gewichten ins Verhältnis zu 16 möglichen Decks pro Woche gesetzt.</p><p>Bei neuen und zurückgekehrten Spielern zählen nur eindeutig zuordenbare aktuelle Wochen. Historische Werte vor dem erneuten Beitritt fließen nicht ein. Die Kategorie richtet sich nach den gewichteten Punkten je CW: Elite ab 2.800, Stark ab 2.300, Solide ab 1.800, Schwach ab 1.200, darunter Kritisch.</p><p>Quelle: RoyaleAPI-Export. Der genaue Datenstand steht oben auf der Seite.</p></div></details>
     <footer>Austria forever · #QY2CRJUQ</footer>
   </main>

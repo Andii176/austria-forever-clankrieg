@@ -22,6 +22,45 @@ function render(){
   row.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
  });
 }
+function recentReview(p){
+ const weeks=Math.min(3,p.ratedWeeks);
+ return {decks:p.history.slice(0,weeks).reduce((sum,h)=>sum+h.decks,0),possible:weeks*16};
+}
+function reviewStatus(p){
+ const recent=recentReview(p);
+ if(p.ratedWeeks<1||p.points===null)return 'new';
+ if(p.points<1200&&recent.decks/recent.possible<2/3)return 'risk';
+ if(p.points<1800||p.lastDecks<12)return 'watch';
+ return 'ok';
+}
+function reviewReason(p,status){
+ const recent=recentReview(p);
+ if(status==='new')return `Ersten abgeschlossenen CW abwarten`;
+ const reasons=[];
+ if(p.points<1200)reasons.push('Kritischer Langzeitwert');
+ else if(p.points<1800)reasons.push('Schwacher Langzeitwert');
+ if(recent.decks/recent.possible<2/3)reasons.push('Unter ⅔ Teilnahme in den gewerteten letzten CW');
+ if(p.lastDecks<12)reasons.push(`Zuletzt ${p.lastDecks}/16 Decks`);
+ if(p.points<1200&&recent.decks/recent.possible>=2/3)reasons.push('Zuletzt höhere Teilnahme – Entwicklung beobachten');
+ return reasons.join(' · ');
+}
+function renderReview(){
+ const groups=[{key:'risk',title:'Gefährdet',note:'Bei der nächsten Clanprüfung zuerst besprechen.'},{key:'watch',title:'Unter Beobachtung',note:'Verbesserung im nächsten CW prüfen.'},{key:'new',title:'Neu / noch offen',note:'Ein abgeschlossener CW zur Eingewöhnung.'}];
+ document.querySelector('#review-groups').innerHTML=groups.map(g=>{
+  const players=data.players.filter(p=>reviewStatus(p)===g.key).sort((a,b)=>recentReview(a).decks/recentReview(a).possible-recentReview(b).decks/recentReview(b).possible||(a.points??Infinity)-(b.points??Infinity)||a.name.localeCompare(b.name,'de'));
+  return `<section class="review-group ${g.key}" aria-labelledby="${g.key}-title"><div class="review-heading"><h3 id="${g.key}-title">${g.title} <span>${players.length}</span></h3><p>${g.note}</p></div>${players.length?`<div class="review-cards">${players.map(p=>`<article class="review-card"><div class="review-player"><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)}</span></div><p class="review-reason">${escapeHTML(reviewReason(p,g.key))}</p><dl><div><dt>Gew. Punkte/CW</dt><dd>${p.points===null?'–':fmt.format(p.points)}</dd></div><div><dt>Bis zu 3 letzte CW</dt><dd>${recentReview(p).decks}/${recentReview(p).possible} Decks</dd></div><div><dt>Letzter CW</dt><dd>${p.lastDecks}/16 Decks</dd></div></dl><button type="button" class="show-player" data-tag="${escapeHTML(p.tag)}">Wochenverlauf ansehen</button></article>`).join('')}</div>`:'<p class="hint">Aktuell keine Spieler in dieser Gruppe.</p>'}</section>`;
+ }).join('');
+ document.querySelectorAll('.show-player').forEach(button=>button.addEventListener('click',()=>{
+  document.querySelector('#search').value=button.dataset.tag;openTag=button.dataset.tag;setView(false);render();document.querySelector('#ranking-title').scrollIntoView({behavior:'smooth',block:'start'});document.querySelector('#rows .player')?.focus({preventScroll:true});
+ }));
+}
+function setView(review){
+ document.querySelector('#statistics-view').hidden=review;
+ document.querySelector('#review-panel').hidden=!review;
+ document.querySelector('#overview-view').setAttribute('aria-pressed',String(!review));
+ document.querySelector('#review-view').setAttribute('aria-pressed',String(review));
+}
+
 async function start(){
  const response=await fetch('data.json');if(!response.ok)throw new Error('Daten nicht verfügbar');data=await response.json();
  document.querySelector('#as-of').textContent=`Stand ${data.asOf}`;
@@ -36,6 +75,7 @@ async function start(){
  const maxPoints=Math.max(...data.trend.map(w=>w.points)),maxDecks=Math.max(...data.trend.map(w=>w.decks));
  const change=(value,prior)=>{if(!prior)return '<span class="muted">–</span>';const pct=(value/prior-1)*100;return `<span class="${pct>=0?'positive':'negative'}">${pct>=0?'+':''}${pct.toLocaleString('de-AT',{maximumFractionDigits:1})} %</span>`};
  document.querySelector('#week-rows').innerHTML=data.trend.map((w,i)=>{const prior=data.trend[i+1];return `<div class="result-row ${i===0?'latest':''}" role="row"><div class="week-cell" role="cell"><strong>${escapeHTML(w.week.replace('s_','Saison ').replace('-',' · CW '))}</strong>${i===0?'<small>Aktuellster CW</small>':''}</div><div class="measure" role="cell"><strong>${fmt.format(w.points)}</strong><div class="track"><span class="points-fill" style="width:${(w.points/maxPoints*100).toFixed(1)}%"></span></div></div><div class="measure" role="cell"><strong>${fmt.format(w.decks)}</strong><div class="track"><span class="decks-fill" style="width:${(w.decks/maxDecks*100).toFixed(1)}%"></span></div></div><div class="change-cell" role="cell"><span>Punkte ${prior?change(w.points,prior.points):'–'}</span><span>Decks ${prior?change(w.decks,prior.decks):'–'}</span></div></div>`}).join('');
+ renderReview();document.querySelector('#overview-view').addEventListener('click',()=>setView(false));document.querySelector('#review-view').addEventListener('click',()=>setView(true));
  document.querySelector('#search').addEventListener('input',render);document.querySelector('#sort').addEventListener('change',render);render();
 }
 start().catch(()=>{document.querySelector('#rows').innerHTML='<tr><td colspan="7">Die Statistik konnte gerade nicht geladen werden.</td></tr>'});
