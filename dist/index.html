@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Aktuelle Clankrieg-Statistik von Austria forever: zeitgewichtetes Ranking, Teilnahme und Wochenverlauf.">
+  <title>Clankrieg · Austria forever</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <div class="identity"><div class="crest" aria-hidden="true">AF</div><div><div class="eyebrow">CLASH ROYALE · #QY2CRJUQ</div><h1>Austria forever</h1></div></div>
+      <div class="update">Clankrieg-Statistik <strong id="as-of">Stand 28.09.2026</strong></div>
+    </header>
+
+    <section class="overview" aria-label="Clanüberblick">
+      <div class="overview-lead"><span class="eyebrow">AKTUELLER CLANKRIEG</span><strong id="lead-points">–</strong><span>Clanpunkte <span id="lead-delta"></span></span></div>
+      <div class="stat"><span>Gespielte Decks</span><strong id="decks">–</strong><small id="decks-delta">im aktuellen Clankrieg</small></div>
+      <div class="stat"><span>Aktive Mitglieder</span><strong id="active">–</strong><small id="active-note">von 49 aktuellen Mitgliedern</small></div>
+      <div class="stat"><span>Punkte pro Deck</span><strong id="efficiency">–</strong><small>im aktuellen Clankrieg</small></div>
+    </section>
+
+    <section class="panel trend-panel" aria-labelledby="trend-title">
+      <div class="section-head"><div><span class="eyebrow">CLANERGEBNIS</span><h2 id="trend-title">Die letzten 10 Kriegswochen</h2></div><div class="legend">Neueste Woche zuerst</div></div>
+      <div class="week-summary" id="week-summary"></div>
+      <div class="week-results" role="table" aria-label="Gesamtpunkte und gespielte Decks je Kriegswoche">
+        <div class="result-head" role="row"><span role="columnheader">Woche</span><span role="columnheader">Gesamtpunkte</span><span role="columnheader">Gespielte Decks</span><span role="columnheader">Änderung zur Vorwoche</span></div>
+        <div id="week-rows"></div>
+      </div>
+      <div class="trend-note">Gesamter Clan zum jeweiligen Zeitpunkt, einschließlich der Beiträge von inzwischen ausgeschiedenen Mitgliedern. Die Balken vergleichen Punkte und Decks jeweils innerhalb ihrer eigenen Skala.</div>
+    </section>
+
+    <section class="panel ranking" aria-labelledby="ranking-title">
+      <div class="section-head rank-head"><div><span class="eyebrow">MITGLIEDER</span><h2 id="ranking-title">Zeitgewichtetes Ranking <span id="member-count"></span></h2></div><div class="controls"><label class="search-wrap"><span class="sr-only">Spieler suchen</span><input id="search" type="search" placeholder="Spieler suchen…" autocomplete="off"></label><label class="sr-only" for="sort">Sortieren</label><select id="sort"><option value="rank">Nach Rang</option><option value="activity">Nach Teilnahme</option><option value="last">Nach letztem CW</option><option value="name">Nach Name</option></select></div></div>
+      <div class="table-scroll"><table><thead><tr><th>Rang</th><th>Spieler</th><th class="numeric">Gew. Punkte/CW</th><th class="numeric">Gew. Teilnahme</th><th class="numeric">Letzte 3 CW</th><th class="numeric">Letzter CW</th><th>Leistung</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <div id="empty" class="empty" hidden>Kein Spieler gefunden.</div>
+      <p class="hint">Spieler antippen, um seine zehn Kriegswochen anzusehen. „Noch offen“ bedeutet, dass seit dem Neueintritt noch keine sichere Wertung möglich ist.</p>
+    </section>
+
+    <details class="method"><summary>So wird das Ranking berechnet</summary><div class="method-body"><p>Die drei neuesten Clankriege zählen je 100 %. Danach sinkt das Gewicht pro Woche auf 90, 80, 70, 60, 50, 40 und 30 %. Die gewichteten Punkte werden durch die Summe der berücksichtigten Wochengewichte geteilt. Für die Teilnahme werden die gespielten Decks mit denselben Gewichten ins Verhältnis zu 16 möglichen Decks pro Woche gesetzt.</p><p>Bei neuen und zurückgekehrten Spielern zählen nur eindeutig zuordenbare aktuelle Wochen. Historische Werte vor dem erneuten Beitritt fließen nicht ein. Die Kategorie richtet sich nach den gewichteten Punkten je CW: Elite ab 2.800, Stark ab 2.300, Solide ab 1.800, Schwach ab 1.200, darunter Kritisch.</p><p>Quelle: RoyaleAPI-Export. Der genaue Datenstand steht oben auf der Seite.</p></div></details>
+    <footer>Austria forever · #QY2CRJUQ</footer>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>
