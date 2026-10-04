@@ -1,7 +1,7 @@
 const fmt=new Intl.NumberFormat('de-AT');
 const memberNote=p=>p.membershipNote?`<span class="membership-note">${escapeHTML(p.membershipNote)}</span>`:'';
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const joinDescription=p=>p.joinKind==='date'&&p.joinDate?'Eintritt: '+p.joinDate.split('-').reverse().join('.'):p.joinKind==='longstanding'?'Länger als 10 Wochen dabei':'Eintritt unbekannt';
+const joinDescription=p=>p.joinKind==='date'&&p.joinDate?(p.joinSource==='observed'?'Beitritt erkannt: ':'Eintritt: ')+p.joinDate.split('-').reverse().join('.'):p.joinKind==='longstanding'?'Länger als 10 Wochen dabei':'Eintritt unbekannt';
 const clanAPI=String(window.CLAN_API??'').replace(/\/$/,'');
 let data,openTag=null;
 function render(){
@@ -68,6 +68,7 @@ function setView(review){
 async function start(){
  const response=await fetch(clanAPI?clanAPI+'/api/data':'data.json',{cache:'no-store'});if(!response.ok)throw new Error('Daten nicht verfügbar');data=await response.json();
  document.querySelector('#as-of').textContent=`Stand ${data.asOf}`;
+ const rosterNote=document.querySelector('#roster-as-of');if(data.rosterAsOf){rosterNote.hidden=false;rosterNote.textContent='Mitglieder geprüft: '+new Date(data.rosterAsOf).toLocaleString('de-AT');}
  const [now,previous]=data.trend;
  document.querySelector('#lead-points').textContent=fmt.format(now.points);
  const delta=(now.points/previous.points-1)*100;

@@ -41,3 +41,10 @@ test('cross origin writes are blocked and allowed origin preflight works',async(
  const response=await worker.fetch(new Request('https://worker/api/memberships',{method:'OPTIONS',headers:{Origin:env.ALLOWED_ORIGIN}}),env);
  assert.equal(response.status,204);assert.equal(response.headers.get('Access-Control-Allow-Origin'),env.ALLOWED_ORIGIN);
 });
+test('automatic detection is visible and later manual correction replaces its source',()=>{
+ const automatic=overlay(snapshot,[{tag:'#LPGPRPRL8',kind:'date',date:'2026-09-21',version:1,source:'observed',detectedAt:'2026-09-21T09:37:00+02:00'}]);
+ assert.equal(person(automatic,'LPGPRPRL8').joinSource,'observed');
+ assert.equal(automatic.membershipRecords.find(r=>r.tag==='#LPGPRPRL8').joinDetectedAt,'2026-09-21T09:37:00+02:00');
+ const manual=overlay(snapshot,[{tag:'#LPGPRPRL8',kind:'date',date:'2026-09-14',version:2,source:'manual',detectedAt:null}]);
+ assert.equal(person(manual,'LPGPRPRL8').joinSource,'manual');
+});

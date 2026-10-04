@@ -15,3 +15,11 @@ Die öffentliche Seite liegt in `dist/`. Der GitHub-Workflow läuft montags um 1
 Fehlen API-Felder oder aktuelle Mitglieder, sind Werte unplausibel, fehlt mehr als eine Woche oder ändern sich die Summen der Vorwoche unerwartet, bricht der Workflow ab und der veröffentlichte Stand bleibt erhalten. Zeigt die API um 12:15 Uhr noch die alte Woche, gibt es zwei weitere Versuche mit je zehn Minuten Abstand. Bleibt die Woche alt, meldet der Workflow einen Fehler. Bei Verzögerungen im GitHub-Zeitplan kann der Start später erfolgen.
 
 Neue Mitglieder beginnen ab ihrer ersten eindeutig spielbaren Woche; bei einer ersten Nullrunde wird ab der folgenden vollen Woche gewertet. Ein Austritt, der zwischen zwei wöchentlichen Momentaufnahmen erfolgt und vor der nächsten Aufnahme rückgängig gemacht wird, ist aus der wöchentlichen Mitgliederliste nicht erkennbar. Dafür wären häufigere Mitglieder-Snapshots erforderlich.
+
+## Stündlicher Mitgliederabgleich
+
+`roster-sync.yml` prüft zur Minute 37 jeder Stunde die aktuellen Mitglieder über die offizielle API und veröffentlicht den aktuellen Mitgliederstand. Beim ersten Lauf wird der aktuelle Clan als Ausgangsbasis gespeichert. Für die bestehenden Mitglieder werden keine rückwirkenden Beitrittsdaten erfunden.
+
+Später neu erkannte Spielertags erhalten das Datum ihrer ersten Erkennung in Europe/Vienna. Der automatische Eintrag wird im zentralen Speicherdienst hinterlegt und erscheint als „Beitritt erkannt“. Manuell gespeicherte Angaben werden nicht überschrieben. Rückkehrer behalten den ursprünglichen Eintrag; `roster-state.json` enthält dafür die bereits gesehenen Tags und eine begrenzte Kriegshistorie. Die gewerteten CW sowie Clan-Wochensummen werden weiterhin aus dem wöchentlichen Datenstand übernommen. Die stündliche Prüfung verändert nur den aktuellen Mitgliederstand und Eintrittsangaben.
+
+Eintrittszeitpunkte bleiben Näherungen zwischen zwei Prüfungen. Sehr kurze Mitgliedschaften zwischen zwei Abrufen können nicht erkannt werden. GitHub kann geplante Läufe verzögert ausführen. Der Zeitpunkt des letzten erfolgreichen Abrufs steht auf der Seite. Bei API-Fehlern bleiben der bisherige Datenstand und die letzte erfolgreiche Abrufzeit erhalten.

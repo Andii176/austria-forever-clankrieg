@@ -1,21 +1,25 @@
 const json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'}});
 const special=new Set(['#Q0LGPRQCY','#P0JGUCR8P']);
 export function validate(input,today=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Vienna'}).format(new Date())){
- if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!['tag','kind','date','version'].includes(k)))throw Error('Ungültige Angaben.');
+ if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!['tag','kind','date','version','source','detectedAt'].includes(k)))throw Error('Ungültige Angaben.');
  const tag=String(input.tag??'').trim().toUpperCase().replace(/^#/,'');
  if(!/^[0289PYLQGRJCUV]{3,15}$/.test(tag))throw Error('Ungültiger Spielertag.');
  if(!['date','longstanding','unknown'].includes(input.kind))throw Error('Ungültige Eintrittsangabe.');
  const date=input.kind==='date'?input.date:null;
  if(input.kind==='date'&&(!/^\d{4}-\d{2}-\d{2}$/.test(date??'')||new Date(date+'T12:00:00Z').toISOString().slice(0,10)!==date||date<'2016-01-01'||date>today))throw Error('Ungültiges Eintrittsdatum.');
  if(!Number.isSafeInteger(input.version)||input.version<0)throw Error('Bitte die Seite neu laden.');
- return {tag:'#'+tag,kind:input.kind,date,version:input.version};
+ const source=input.source??'manual';
+ if(!['manual','observed'].includes(source))throw Error('Ungültige Herkunft.');
+ const detectedAt=source==='observed'?input.detectedAt:null;
+ if(source==='observed'&&(input.kind!=='date'||typeof detectedAt!=='string'||!/^\d{4}-\d{2}-\d{2}T/.test(detectedAt)||!Number.isFinite(Date.parse(detectedAt))||detectedAt.slice(0,10)!==date))throw Error('Ungültiger Erkennungszeitpunkt.');
+ return {tag:'#'+tag,kind:input.kind,date,version:input.version,source,detectedAt};
 }
 export function overlay(snapshot,stored){
  const data=structuredClone(snapshot),records=new Map((data.membershipRecords??data.players).map(p=>[p.tag,{...p,version:0}]));
  for(const r of stored)records.set(r.tag,{...records.get(r.tag),...r,joinKind:r.kind,joinDate:r.date,name:records.get(r.tag)?.name??r.tag});
  for(const p of data.players){
   const record=records.get(p.tag);if(!record)continue;
-  p.joinKind=record.joinKind??'unknown';p.joinDate=record.joinDate??null;
+  p.joinKind=record.joinKind??'unknown';p.joinDate=record.joinDate??null;p.joinSource=record.source??'manual';p.joinDetectedAt=record.detectedAt??null;
   if(special.has(p.tag))continue;
   let count=p.ratedWeeks;
   if(p.joinKind==='longstanding')count=p.history.length;
@@ -34,7 +38,7 @@ export function overlay(snapshot,stored){
  }
  data.players.sort((a,b)=>(a.points===null)-(b.points===null)||(b.points??0)-(a.points??0)||(b.participation??0)-(a.participation??0)||a.name.localeCompare(b.name,'de'));
  data.players.forEach((p,i)=>p.rank=p.points===null?null:i+1);
- data.membershipRecords=[...records.values()].map(r=>({tag:r.tag,name:r.name,joinKind:r.joinKind??'unknown',joinDate:r.joinDate??null,version:r.version??0,updatedAt:r.updatedAt??null,membershipNote:r.membershipNote??'',changes:r.changes??[]}));
+ data.membershipRecords=[...records.values()].map(r=>({tag:r.tag,name:r.name,joinKind:r.joinKind??'unknown',joinDate:r.joinDate??null,joinSource:r.source??'manual',joinDetectedAt:r.detectedAt??null,version:r.version??0,updatedAt:r.updatedAt??null,membershipNote:r.membershipNote??'',changes:r.changes??[]}));
  return data;
 }
 async function readSmall(request){
@@ -60,7 +64,7 @@ export class MembershipStore{
     const bucket=await tx.get(ipKey);
     if(bucket&&bucket.until>now&&bucket.count>=120)return {status:429,error:'Zu viele Änderungen. Bitte später erneut versuchen.'};
     const count=bucket&&bucket.until>now?bucket.count+1:1,updatedAt=new Date().toISOString();
-    const next={tag:input.tag,kind:input.kind,date:input.date,version:input.version+1,updatedAt,
+    const next={tag:input.tag,kind:input.kind,date:input.date,source:input.source,detectedAt:input.detectedAt,version:input.version+1,updatedAt,
      changes:[...(current?.changes??[]),{kind:current?.kind??null,date:current?.date??null,changedAt:updatedAt}].slice(-20)};
     await tx.put({[ipKey]:{count,until:bucket&&bucket.until>now?bucket.until:now+3600000},['member:'+input.tag]:next});
     return {status:200,record:next};
