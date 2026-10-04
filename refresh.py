@@ -20,6 +20,7 @@ STATE = ROOT / 'member-state.json'
 CLAN = 'QY2CRJUQ'
 WEIGHTS = [1, 1, 1, .9, .8, .7, .6, .5, .4, .3]
 API = 'https://proxy.royaleapi.dev/v1'
+REJOIN_NOTES = {'Q0LGPRQCY': 'Gelegentliche Austritte und Wiedereintritte. Alle Wochen seit dem ersten wertbaren CW zählen, auch Wochen außerhalb des Clans.', 'P0JGUCR8P': 'Gelegentliche Austritte und Wiedereintritte. Alle Wochen seit dem ersten wertbaren CW zählen, auch Wochen außerhalb des Clans.'}
 
 
 def fetch_json(path, token):
@@ -115,7 +116,12 @@ def calculate(rows, current, weeks, state):
                         'category': category, 'history': history,
                         'ratingStart': member['since'],
                         'joinEstimated': member.get('estimated', True),
-                        'lastThreePossible': 16 * min(3, len(rated))})
+                        'lastThreePossible': 16 * min(3, len(rated)),
+                        'membershipNote': REJOIN_NOTES.get(tag, '')})
+    # Keep the original rating start for the two known returning members.
+    for tag in REJOIN_NOTES:
+        if tag not in members and tag in former:
+            members[tag] = dict(former[tag])
     players.sort(key=lambda p: (p['points'] is None, -(p['points'] or 0),
                                 -(p['participation'] or 0), p['name'].casefold()))
     for i, p in enumerate(players):
