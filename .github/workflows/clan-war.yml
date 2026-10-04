@@ -2,8 +2,6 @@ name: Clankrieg aktualisieren
 on:
   push:
     branches: [main]
-  issues:
-    types: [opened]
   workflow_dispatch:
     inputs:
       verify_only:
@@ -15,7 +13,6 @@ on:
       timezone: Europe/Vienna
 permissions:
   contents: write
-  issues: write
   pages: write
   id-token: write
 concurrency:
@@ -23,7 +20,6 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
-    if: github.event_name != 'issues' || (startsWith(github.event.issue.title, '[Clanbeitritt] ') && contains(fromJSON('["OWNER","COLLABORATOR"]'), github.event.issue.author_association))
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -42,13 +38,8 @@ jobs:
         env:
           CLASH_ROYALE_API_TOKEN: ${{ secrets.CLASH_ROYALE_API_TOKEN }}
         run: python3 refresh.py ${{ inputs.verify_only && '--verify' || '' }}
-      - name: Eintritt speichern und Wertung neu berechnen
-        if: github.event_name == 'issues'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python3 membership.py
       - name: Neuen Datenstand speichern
-        if: github.event_name == 'issues' || (github.event_name != 'push' && !inputs.verify_only)
+        if: github.event_name != 'push' && !inputs.verify_only
         run: |
           git config user.name 'Clanwar updater'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -64,8 +55,3 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
         if: github.event_name != 'workflow_dispatch' || !inputs.verify_only
-      - name: Gespeicherten Eintritt bestätigen
-        if: github.event_name == 'issues'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python3 membership.py --complete

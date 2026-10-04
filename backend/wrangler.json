@@ -1,0 +1,11 @@
+{
+  "name": "austria-forever-memberships",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-04",
+  "vars": {
+    "ALLOWED_ORIGIN": "https://andii176.github.io",
+    "SNAPSHOT_URL": "https://andii176.github.io/austria-forever-clankrieg/data.json"
+  },
+  "durable_objects": {"bindings": [{"name": "MEMBERSHIPS", "class_name": "MembershipStore"}]},
+  "exports": {"MembershipStore": {"type": "durable-object", "storage": "sqlite"}}
+}
