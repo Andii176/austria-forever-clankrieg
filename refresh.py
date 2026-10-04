@@ -203,6 +203,9 @@ def main():
     if len(weeks) < 2 or weeks[1] != state['last_week']:
         raise ValueError('More than one week changed or columns were reordered; manual review needed')
     data, next_state = calculate(rows, current, weeks, state)
+    for key in ('liveWar', 'rosterAsOf'):
+        if key in old:
+            data[key] = old[key]
     if data['trend'][1]['points'] != old['trend'][0]['points'] or data['trend'][1]['decks'] != old['trend'][0]['decks']:
         raise ValueError('Previous CW total changed unexpectedly; manual review needed')
     DATA.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')

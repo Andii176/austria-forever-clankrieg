@@ -71,6 +71,8 @@ def current_snapshot(old, state, tracker, api_rows, roster, observed_at):
         next_state['members'].setdefault(tag, member)
     for key in ('asOf', 'source', 'trend'):
         result[key] = old[key]
+    if 'liveWar' in old:
+        result['liveWar'] = old['liveWar']
     result['rosterAsOf'] = observed_at
     result['currentActive'] = sum(p['lastDecks'] > 0 for p in result['players'])
     return result, next_state
@@ -102,17 +104,6 @@ def main():
             # A concurrent manual edit takes priority. Never overwrite it automatically.
             print('Eintritt wurde zwischenzeitlich bearbeitet; manuelle Angabe bleibt erhalten')
     result, next_state = current_snapshot(old, state, next_tracker, api_rows, roster, observed_at)
-    try:
-        race = fetch_json(clan_path+'/currentriverrace', token)
-        clan = race.get('clan', {})
-        participants = clan.get('participants', [])
-        print('Laufender CW: '+json.dumps({'fields': list(race), 'seasonId': race.get('seasonId'),
-              'sectionIndex': race.get('sectionIndex'), 'periodIndex': race.get('periodIndex'),
-              'periodType': race.get('periodType'), 'participants': len(participants),
-              'points': sum(p.get('fame', 0)+p.get('repairPoints', 0) for p in participants),
-              'decks': sum(p.get('decksUsed', 0) for p in participants)}, ensure_ascii=False))
-    except (HTTPError, ValueError, OSError) as error:
-        print('Laufender CW derzeit nicht abrufbar: '+type(error).__name__)
     for path, value in ((DATA, result), (STATE, next_state), (TRACKER, next_tracker)):
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2 if path != DATA else None)+'\n')
     print(f'Mitglieder geprüft: {len(roster)}; neue Eintrittsangaben: {len(additions)}; {observed_at}')

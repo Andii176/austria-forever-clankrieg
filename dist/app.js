@@ -69,6 +69,7 @@ async function start(){
  const response=await fetch(clanAPI?clanAPI+'/api/data':'data.json',{cache:'no-store'});if(!response.ok)throw new Error('Daten nicht verfügbar');data=await response.json();
  document.querySelector('#as-of').textContent=`Stand ${data.asOf}`;
  const rosterNote=document.querySelector('#roster-as-of');if(data.rosterAsOf){rosterNote.hidden=false;rosterNote.textContent='Mitglieder geprüft: '+new Date(data.rosterAsOf).toLocaleString('de-AT');}
+ if(data.liveWar){const w=data.liveWar;document.querySelector('#live-war').hidden=false;document.querySelector('#live-title').textContent=w.week.replace('s_','Saison ').replace('-',' · CW ')+' · '+w.status;document.querySelector('#live-summary').textContent=fmt.format(w.points)+' Punkte · '+fmt.format(w.decks)+' gespielte Decks';document.querySelector('#live-updated').textContent='Abgerufen: '+new Date(w.checkedAt).toLocaleString('de-AT');document.querySelector('#live-players').innerHTML=w.players.map(p=>`<tr><td><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)}${p.currentMember?'':' · inzwischen ausgeschieden'}</span></td><td>${fmt.format(p.points)}</td><td>${fmt.format(p.decks)}</td></tr>`).join('');}
  const [now,previous]=data.trend;
  document.querySelector('#lead-points').textContent=fmt.format(now.points);
  const delta=(now.points/previous.points-1)*100;

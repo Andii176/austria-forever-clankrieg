@@ -7,7 +7,7 @@
   <meta name="description" content="Aktuelle Clankrieg-Statistik von Austria forever: zeitgewichtetes Ranking, Teilnahme und Wochenverlauf.">
   <title>Clankrieg · Austria forever</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=membership-names-1">
+  <link rel="stylesheet" href="style.css?v=live-war-1">
 </head>
 <body>
   <main class="shell">
@@ -18,11 +18,12 @@
 
     <nav class="view-nav" aria-label="Ansicht"><button type="button" id="overview-view" aria-pressed="true">Statistik & Ranking</button><button type="button" id="review-view" aria-pressed="false">Gefährdet & Beobachtung</button><button type="button" id="membership-view" aria-pressed="false">Clanbeitritte</button></nav>
     <div id="statistics-view">
+    <section class="panel" id="live-war" hidden aria-labelledby="live-title"><div class="section-head"><div><span class="eyebrow">AKTUELLER CW · ZWISCHENSTAND</span><h2 id="live-title">Aktueller Clankrieg</h2></div></div><p id="live-summary"></p><p class="hint" id="live-updated"></p><details><summary>Spieler und ihre aktuellen Beiträge</summary><div class="table-wrap"><table><thead><tr><th>Spieler</th><th>Punkte</th><th>Decks</th></tr></thead><tbody id="live-players"></tbody></table></div></details><p class="hint">Aktualisierung Donnerstag bis Montag um 12:15 Uhr österreichischer Zeit. Punkte und Decks laut API, einschließlich inzwischen ausgeschiedener Teilnehmer. Dieser Stand fließt erst nach Abschluss in das 10-Wochen-Ranking ein.</p></section>
     <section class="overview" aria-label="Clanüberblick">
-      <div class="overview-lead"><span class="eyebrow">AKTUELLER CLANKRIEG</span><strong id="lead-points">–</strong><span>Clanpunkte <span id="lead-delta"></span></span></div>
-      <div class="stat"><span>Gespielte Decks</span><strong id="decks">–</strong><small id="decks-delta">im aktuellen Clankrieg</small></div>
+      <div class="overview-lead"><span class="eyebrow">LETZTER ABGESCHLOSSENER CW</span><strong id="lead-points">–</strong><span>Clanpunkte <span id="lead-delta"></span></span></div>
+      <div class="stat"><span>Gespielte Decks</span><strong id="decks">–</strong><small id="decks-delta">im letzten abgeschlossenen Clankrieg</small></div>
       <div class="stat"><span>Aktive Mitglieder</span><strong id="active">–</strong><small id="active-note">von 49 aktuellen Mitgliedern</small></div>
-      <div class="stat"><span>Punkte pro Deck</span><strong id="efficiency">–</strong><small>im aktuellen Clankrieg</small></div>
+      <div class="stat"><span>Punkte pro Deck</span><strong id="efficiency">–</strong><small>im letzten abgeschlossenen Clankrieg</small></div>
     </section>
 
     <section class="panel trend-panel" aria-labelledby="trend-title">
@@ -69,7 +70,7 @@
     <details class="method"><summary>So wird das Ranking berechnet</summary><div class="method-body"><p>Die drei neuesten Clankriege zählen je 100 %. Danach sinkt das Gewicht pro Woche auf 90, 80, 70, 60, 50, 40 und 30 %. Die gewichteten Punkte werden durch die Summe der berücksichtigten Wochengewichte geteilt. Für die Teilnahme werden die gespielten Decks mit denselben Gewichten ins Verhältnis zu 16 möglichen Decks pro Woche gesetzt.</p><p>Hinterlegte Eintrittsdaten bestimmen den Wertungsbeginn. Ohne diese Angabe beginnt die Wertung mit der ersten sichtbaren Teilnahme im betrachteten Zeitraum. Frühere Nullwochen zählen nicht. Nullwochen nach diesem Beginn zählen vollständig mit, auch bei späterer Inaktivität. Für Reinigungslord2 und HEXE OP zählen ausdrücklich alle Wochen seit der ersten sichtbaren Teilnahme, einschließlich zwischenzeitlicher Austritte. Dies ist bei beiden Spielern vermerkt. Der Beginn wird gespeichert und bei künftigen Aktualisierungen fortgeführt. Ohne hinterlegtes Datum ist der Wertungsbeginn geschätzt. Die Vorbelegung „länger als 10 Wochen“ ist eine Annahme anhand der zehn gewerteten CW und kann korrigiert werden. Wer schon länger dabei war, aber zunächst nicht gespielt hat, kann dadurch zu günstig bewertet werden. Die Kategorie richtet sich nach den gewichteten Punkten je CW: Elite ab 2.800, Stark ab 2.300, Solide ab 1.800, Schwach ab 1.200, darunter Kritisch.</p><p>Quelle: RoyaleAPI-Export. Der genaue Datenstand steht oben auf der Seite.</p></div></details>
     <footer>Austria forever · #QY2CRJUQ</footer>
   </main>
-  <script src="config.js?v=membership-names-1"></script>
-  <script src="app.js?v=membership-names-1" defer></script>
+  <script src="config.js?v=live-war-1"></script>
+  <script src="app.js?v=live-war-1" defer></script>
 </body>
 </html>

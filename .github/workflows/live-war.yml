@@ -1,0 +1,52 @@
+name: Aktuellen Clankrieg täglich aktualisieren
+on:
+  schedule:
+    - cron: '15 12 * * 0,1,4,5,6'
+      timezone: Europe/Vienna
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - live_war.py
+      - test_live_war.py
+      - .github/workflows/live-war.yml
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: clan-war-pages
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: CW-Zuordnung prüfen
+        run: python3 -m unittest -v test_live_war.py
+      - name: Aktuellen CW abrufen
+        env:
+          CLASH_ROYALE_API_TOKEN: ${{ secrets.CLASH_ROYAL_API_TOKEN || secrets.CLASH_ROYALE_API_TOKEN }}
+        run: python3 live_war.py
+      - name: CW-Zwischenstand speichern
+        run: |
+          git config user.name 'Clanwar updater'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist/data.json
+          git diff --cached --quiet || git commit -m 'Update current clan war snapshot'
+          git push
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
