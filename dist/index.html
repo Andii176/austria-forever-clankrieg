@@ -7,7 +7,7 @@
   <meta name="description" content="Aktuelle Clankrieg-Statistik von Austria forever: zeitgewichtetes Ranking, Teilnahme und Wochenverlauf.">
   <title>Clankrieg · Austria forever</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=rating-start-3">
+  <link rel="stylesheet" href="style.css?v=membership-1">
 </head>
 <body>
   <main class="shell">
@@ -16,7 +16,7 @@
       <div class="update">Clankrieg-Statistik <strong id="as-of">Stand 28.09.2026</strong></div>
     </header>
 
-    <nav class="view-nav" aria-label="Ansicht"><button type="button" id="overview-view" aria-pressed="true">Statistik & Ranking</button><button type="button" id="review-view" aria-pressed="false">Gefährdet & Beobachtung</button></nav>
+    <nav class="view-nav" aria-label="Ansicht"><button type="button" id="overview-view" aria-pressed="true">Statistik & Ranking</button><button type="button" id="review-view" aria-pressed="false">Gefährdet & Beobachtung</button><button type="button" id="membership-view" aria-pressed="false">Clanbeitritte</button></nav>
     <div id="statistics-view">
     <section class="overview" aria-label="Clanüberblick">
       <div class="overview-lead"><span class="eyebrow">AKTUELLER CLANKRIEG</span><strong id="lead-points">–</strong><span>Clanpunkte <span id="lead-delta"></span></span></div>
@@ -39,7 +39,7 @@
       <div class="section-head rank-head"><div><span class="eyebrow">MITGLIEDER</span><h2 id="ranking-title">Zeitgewichtetes Ranking <span id="member-count"></span></h2></div><div class="controls"><label class="search-wrap"><span class="sr-only">Spieler suchen</span><input id="search" type="search" placeholder="Spieler suchen…" autocomplete="off"></label><label class="sr-only" for="sort">Sortieren</label><select id="sort"><option value="rank">Nach Rang</option><option value="activity">Nach Teilnahme</option><option value="last">Nach letztem CW</option><option value="name">Nach Name</option></select></div></div>
       <div class="table-scroll"><table><thead><tr><th>Rang</th><th>Spieler</th><th class="numeric">Gew. Punkte/CW</th><th class="numeric">Gew. Teilnahme</th><th class="numeric">Bis zu 3 letzte CW</th><th class="numeric">Letzter CW</th><th>Leistung</th></tr></thead><tbody id="rows"></tbody></table></div>
       <div id="empty" class="empty" hidden>Kein Spieler gefunden.</div>
-      <p class="hint">Spieler antippen, um ausschließlich seine gewerteten Kriegswochen anzusehen. Die Wertung beginnt mit der ersten sichtbaren Teilnahme im betrachteten Zeitraum. „Wertungsbeginn geschätzt“ ist kein bestätigtes Beitrittsdatum. Ohne sichtbare Teilnahme bleibt die Wertung zunächst offen.</p>
+      <p class="hint">Spieler antippen, um ausschließlich seine gewerteten Kriegswochen anzusehen. Bei hinterlegtem Eintritt beginnt die Wertung mit dem zugehörigen Clankrieg; sonst mit der ersten sichtbaren Teilnahme im betrachteten Zeitraum. „Wertungsbeginn geschätzt“ ist kein bestätigtes Beitrittsdatum. Ohne sichtbare Teilnahme bleibt die Wertung zunächst offen.</p>
     </section>
 
     </div>
@@ -49,9 +49,25 @@
       <div id="review-groups"></div>
       <details class="method review-method"><summary>So wird die Einstufung berechnet</summary><div class="method-body"><p><strong>Gefährdet:</strong> mindestens ein gewerteter CW, unter 1.200 gewichtete Punkte pro CW und weniger als zwei Drittel der möglichen Decks in den bis zu drei letzten gewerteten CW. Die Reihenfolge priorisiert die geringste Teilnahme der letzten drei Wochen, danach die geringsten gewichteten Punkte.</p><p><strong>Unter Beobachtung:</strong> mindestens ein gewerteter CW und unter 1.800 gewichtete Punkte pro CW oder weniger als zwölf Decks im letzten CW. Wer trotz kritischem Langzeitwert zuletzt mindestens zwei Drittel der möglichen Decks gespielt hat, bleibt zunächst unter Beobachtung.</p><p><strong>Neu / noch offen:</strong> noch kein sicher gewerteter CW. Neue Spieler bekommen einen abgeschlossenen CW; danach gelten dieselben Regeln. Für ihre Teilnahme zählen nur die Wochen seit dem geschätzten Wertungsbeginn. Die Einstufungen werden mit jedem neuen Datenstand automatisch neu berechnet.</p></div></details>
     </section>
-    <details class="method"><summary>So wird das Ranking berechnet</summary><div class="method-body"><p>Die drei neuesten Clankriege zählen je 100 %. Danach sinkt das Gewicht pro Woche auf 90, 80, 70, 60, 50, 40 und 30 %. Die gewichteten Punkte werden durch die Summe der berücksichtigten Wochengewichte geteilt. Für die Teilnahme werden die gespielten Decks mit denselben Gewichten ins Verhältnis zu 16 möglichen Decks pro Woche gesetzt.</p><p>Für alle Spieler beginnt die Wertung mit der ersten sichtbaren Teilnahme im betrachteten Zeitraum. Frühere Nullwochen zählen nicht. Nullwochen nach diesem Beginn zählen vollständig mit, auch bei späterer Inaktivität. Für Reinigungslord2 und HEXE OP zählen ausdrücklich alle Wochen seit der ersten sichtbaren Teilnahme, einschließlich zwischenzeitlicher Austritte. Dies ist bei beiden Spielern vermerkt. Der Beginn wird gespeichert und bei künftigen Aktualisierungen fortgeführt. Das tatsächliche Beitrittsdatum ist unbekannt: Der Wertungsbeginn ist geschätzt. Wer schon länger dabei war, aber zunächst nicht gespielt hat, kann dadurch zu günstig bewertet werden. Die Kategorie richtet sich nach den gewichteten Punkten je CW: Elite ab 2.800, Stark ab 2.300, Solide ab 1.800, Schwach ab 1.200, darunter Kritisch.</p><p>Quelle: RoyaleAPI-Export. Der genaue Datenstand steht oben auf der Seite.</p></div></details>
+<section id="membership-panel" class="panel" hidden aria-labelledby="membership-title">
+<div class="section-head"><div><span class="eyebrow">CLANLEITUNG</span><h2 id="membership-title">Clanbeitritte verwalten</h2></div></div>
+<p>Eintrittsdaten gelten für die gemeinsame Statistik und bleiben bei Wochenupdates erhalten. Vorbelegte Angaben und Datumswerte können jederzeit überschrieben werden.</p>
+<form id="membership-form" class="membership-form">
+<label>Spieler auswählen<select id="join-player"><option value="">Neuen Spieler per Tag eintragen</option></select></label>
+<label>Spielertag<input id="join-tag" placeholder="#ABC123" required maxlength="16" autocomplete="off"></label>
+<label>Eintrittsangabe<select id="join-kind"><option value="date">Genaues Eintrittsdatum</option><option value="longstanding">Länger als 10 Wochen dabei</option><option value="unknown">Unbekannt – anhand der Teilnahme schätzen</option></select></label>
+<label id="join-date-label">Eintrittsdatum<input id="join-date" type="date" min="2016-01-01" required></label>
+<p id="join-current" class="hint"></p><p id="join-exception" class="membership-note" hidden>Bei diesem Spieler bleibt die Wertung seit dem ersten wertbaren CW durchgehend bestehen, einschließlich Austritten. Das Eintrittsdatum wird als Information gespeichert.</p>
+<button type="submit">In GitHub speichern / überschreiben</button>
+<p class="hint">Es öffnet sich ein vorbereiteter GitHub-Eintrag. Als Andii176 oder berechtigter Mitwirkender anmelden und „Create issue“ bestätigen. Nach erfolgreicher Verarbeitung wird der Eintrag geschlossen. Die Änderung ist anschließend für alle sichtbar. Keine Zugangsschlüssel erforderlich.</p>
+<p id="join-feedback" role="status"></p>
+</form>
+<p class="hint">Das Datum gilt ab dem Clankrieg, dessen Abschlussmontag nach dem Eintritt liegt. Ein Eintritt am Montag zählt ab dem folgenden CW; spätere Nullwochen zählen mit. „Länger als 10 Wochen“ berücksichtigt den gesamten verfügbaren Verlauf. Neue Spieler können schon vor ihrem ersten abgeschlossenen CW über ihren Tag eingetragen werden.</p>
+<div id="membership-list" class="membership-list"></div>
+</section>
+    <details class="method"><summary>So wird das Ranking berechnet</summary><div class="method-body"><p>Die drei neuesten Clankriege zählen je 100 %. Danach sinkt das Gewicht pro Woche auf 90, 80, 70, 60, 50, 40 und 30 %. Die gewichteten Punkte werden durch die Summe der berücksichtigten Wochengewichte geteilt. Für die Teilnahme werden die gespielten Decks mit denselben Gewichten ins Verhältnis zu 16 möglichen Decks pro Woche gesetzt.</p><p>Hinterlegte Eintrittsdaten bestimmen den Wertungsbeginn. Ohne diese Angabe beginnt die Wertung mit der ersten sichtbaren Teilnahme im betrachteten Zeitraum. Frühere Nullwochen zählen nicht. Nullwochen nach diesem Beginn zählen vollständig mit, auch bei späterer Inaktivität. Für Reinigungslord2 und HEXE OP zählen ausdrücklich alle Wochen seit der ersten sichtbaren Teilnahme, einschließlich zwischenzeitlicher Austritte. Dies ist bei beiden Spielern vermerkt. Der Beginn wird gespeichert und bei künftigen Aktualisierungen fortgeführt. Ohne hinterlegtes Datum ist der Wertungsbeginn geschätzt. Die Vorbelegung „länger als 10 Wochen“ ist eine Annahme anhand der zehn gewerteten CW und kann korrigiert werden. Wer schon länger dabei war, aber zunächst nicht gespielt hat, kann dadurch zu günstig bewertet werden. Die Kategorie richtet sich nach den gewichteten Punkten je CW: Elite ab 2.800, Stark ab 2.300, Solide ab 1.800, Schwach ab 1.200, darunter Kritisch.</p><p>Quelle: RoyaleAPI-Export. Der genaue Datenstand steht oben auf der Seite.</p></div></details>
     <footer>Austria forever · #QY2CRJUQ</footer>
   </main>
-  <script src="app.js?v=rating-start-3" defer></script>
+  <script src="app.js?v=membership-1" defer></script>
 </body>
 </html>

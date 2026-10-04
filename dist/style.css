@@ -7,3 +7,5 @@
 .week.excluded{opacity:.45;border-style:dashed}
 
 .membership-note{display:block;white-space:normal;max-width:330px;color:#d8b777;font-size:.73rem;font-weight:400;line-height:1.5;margin-top:6px}
+
+.membership-form{display:grid;gap:16px;max-width:650px;margin:24px 0}.membership-form label{display:grid;gap:8px}.membership-form input,.membership-form select{width:100%;padding:12px;border:1px solid #42506a;border-radius:8px;background:#111827;color:#fff;font:inherit}.membership-form button,.membership-row button{padding:12px 16px;border:1px solid #42506a;border-radius:8px;background:#24334e;color:#fff;font:inherit;cursor:pointer}.membership-form [hidden]{display:none}.membership-row{display:flex;gap:20px;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #334155}.view-nav{flex-wrap:wrap}

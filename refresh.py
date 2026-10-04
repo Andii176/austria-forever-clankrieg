@@ -8,7 +8,7 @@ import json
 import os
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from pathlib import Path
 from urllib.parse import quote
 from urllib.request import Request, urlopen
@@ -79,6 +79,12 @@ def parse(log, roster):
 
 def calculate(rows, current, weeks, state):
     former = state['members']
+    old_dates = state.get('week_end_dates', {})
+    anchor = next((w for w in weeks if w in old_dates), None)
+    if anchor is None:
+        raise ValueError('Missing calendar anchor for completed wars')
+    newest_end = date.fromisoformat(old_dates[anchor]) + timedelta(days=7*weeks.index(anchor))
+    end_dates = {w: (newest_end-timedelta(days=7*i)).isoformat() for i,w in enumerate(weeks)}
     members = {}
     players = []
     for row in current:
@@ -96,8 +102,15 @@ def calculate(rows, current, weeks, state):
         else:
             member = {'new': True, 'since': weeks[0] if history[0]['decks'] else None,
                       'first_seen': weeks[0], 'estimated': True}
+        member['name'] = row['player_name']
         members[tag] = member
-        if member['since'] is None:
+        if member.get('join_kind') == 'date' and tag not in REJOIN_NOTES:
+            rated = [h for h in history if member['join_date'] < end_dates[h['week']]]
+            member['since'] = rated[-1]['week'] if rated else None
+            member['estimated'] = False
+        elif member.get('join_kind') == 'longstanding':
+            rated = history
+        elif member['since'] is None:
             rated = []
         elif member['since'] in weeks:
             rated = history[:weeks.index(member['since']) + 1]
@@ -116,12 +129,14 @@ def calculate(rows, current, weeks, state):
                         'category': category, 'history': history,
                         'ratingStart': member['since'],
                         'joinEstimated': member.get('estimated', True),
+                        'joinKind': member.get('join_kind', 'unknown'),
+                        'joinDate': member.get('join_date'),
                         'lastThreePossible': 16 * min(3, len(rated)),
                         'membershipNote': REJOIN_NOTES.get(tag, '')})
     # Keep the original rating start for the two known returning members.
-    for tag in REJOIN_NOTES:
-        if tag not in members and tag in former:
-            members[tag] = dict(former[tag])
+    for tag, old_member in former.items():
+        if tag not in members and (tag in REJOIN_NOTES or old_member.get('join_kind')):
+            members[tag] = dict(old_member)
     players.sort(key=lambda p: (p['points'] is None, -(p['points'] or 0),
                                 -(p['participation'] or 0), p['name'].casefold()))
     for i, p in enumerate(players):
@@ -131,11 +146,15 @@ def calculate(rows, current, weeks, state):
               'decks': sum(int(r[w+'_decks_used'] or 0) for r in rows),
               'active': sum(int(r[w+'_decks_used'] or 0) > 0 for r in rows)}
              for i, w in enumerate(weeks)]
+    records = [{'tag': '#'+tag, 'name': m.get('name', '#'+tag),
+                'joinKind': m.get('join_kind', 'unknown'), 'joinDate': m.get('join_date'),
+                'membershipNote': REJOIN_NOTES.get(tag, '')}
+               for tag, m in members.items()]
     now = datetime.now(ZoneInfo('Europe/Vienna')).strftime('%d.%m.%Y')
     data = {'clan': 'Austria forever', 'clanTag': '#'+CLAN, 'asOf': now,
             'source': f'Clash Royale API vom {now}', 'weeks': weeks, 'players': players,
-            'trend': trend, 'currentActive': sum(p['lastDecks'] > 0 for p in players)}
-    return data, {'last_week': weeks[0], 'members': members}
+            'trend': trend, 'membershipRecords': records, 'weekEndDates': end_dates, 'currentActive': sum(p['lastDecks'] > 0 for p in players)}
+    return data, {'last_week': weeks[0], 'members': members, 'week_end_dates': end_dates}
 
 
 def main():

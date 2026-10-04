@@ -1,6 +1,7 @@
 const fmt=new Intl.NumberFormat('de-AT');
 const memberNote=p=>p.membershipNote?`<span class="membership-note">${escapeHTML(p.membershipNote)}</span>`:'';
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const joinDescription=p=>p.joinKind==='date'&&p.joinDate?'Eintritt: '+p.joinDate.split('-').reverse().join('.'):p.joinKind==='longstanding'?'Länger als 10 Wochen dabei':'Eintritt unbekannt';
 let data,openTag=null;
 function render(){
  const q=document.querySelector('#search').value.trim().toLocaleLowerCase('de');
@@ -12,8 +13,8 @@ function render(){
  const body=document.querySelector('#rows');
  body.innerHTML=items.map(p=>{
   const expanded=openTag===p.tag;
-  const main=`<tr class="player" data-tag="${escapeHTML(p.tag)}" tabindex="0" role="button" aria-label="${escapeHTML(p.name)}: Wochenverlauf ${expanded?'schließen':'öffnen'}" aria-expanded="${expanded}"><td>${p.rank??'–'}</td><td><span class="player-name">${escapeHTML(p.name)}</span><span class="tag">${escapeHTML(p.tag)}${p.joinEstimated?' · Wertungsbeginn geschätzt':''} · ${p.ratedWeeks} CW gewertet</span>${memberNote(p)}</td><td class="numeric"><strong>${p.points===null?'–':fmt.format(p.points)}</strong></td><td class="numeric">${p.participation===null?'–':p.participation.toLocaleString('de-AT')+' %'}</td><td class="numeric">${p.lastThree}/${p.lastThreePossible??48}</td><td class="numeric">${p.lastDecks}/16</td><td><span class="pill ${p.category.toLocaleLowerCase('de').replace(' ','-')}">${escapeHTML(p.category)}</span></td></tr>`;
-  const detail=expanded?`<tr class="detail"><td colspan="7"><div class="detail-title">${p.ratedWeeks} gewertete CW · ${p.ratingStart?'Beginn: '+escapeHTML(p.ratingStart.replace('s_','Saison ').replace('-',' · CW '))+' (geschätzt)':'Noch keine Teilnahme'} · neueste Woche zuerst</div><div class="week-grid">${p.history.slice(0,p.ratedWeeks).map((h,i)=>`<div class="week ${i>=p.ratedWeeks?'excluded':''}"><b>${escapeHTML(h.week.replace('s_','Saison ').replace('-',' · CW '))}</b><strong>${fmt.format(h.points)} P.</strong><small>${h.decks}/16 Decks · ${i>=p.ratedWeeks?'Nicht gewertet':Math.round(h.weight*100)+' % Gewicht'}</small></div>`).join('')}</div></td></tr>`:'';
+  const main=`<tr class="player" data-tag="${escapeHTML(p.tag)}" tabindex="0" role="button" aria-label="${escapeHTML(p.name)}: Wochenverlauf ${expanded?'schließen':'öffnen'}" aria-expanded="${expanded}"><td>${p.rank??'–'}</td><td><span class="player-name">${escapeHTML(p.name)}</span><span class="tag">${escapeHTML(p.tag)}${p.joinEstimated?' · Wertungsbeginn geschätzt':''} · ${p.ratedWeeks} CW gewertet · ${escapeHTML(joinDescription(p))}</span>${memberNote(p)}</td><td class="numeric"><strong>${p.points===null?'–':fmt.format(p.points)}</strong></td><td class="numeric">${p.participation===null?'–':p.participation.toLocaleString('de-AT')+' %'}</td><td class="numeric">${p.lastThree}/${p.lastThreePossible??48}</td><td class="numeric">${p.lastDecks}/16</td><td><span class="pill ${p.category.toLocaleLowerCase('de').replace(' ','-')}">${escapeHTML(p.category)}</span></td></tr>`;
+  const detail=expanded?`<tr class="detail"><td colspan="7"><div class="detail-title">${p.ratedWeeks} gewertete CW · ${p.ratingStart?'Beginn: '+escapeHTML(p.ratingStart.replace('s_','Saison ').replace('-',' · CW '))+(p.joinEstimated?' (geschätzt)':''):'Noch keine Teilnahme'} · neueste Woche zuerst</div><div class="week-grid">${p.history.slice(0,p.ratedWeeks).map((h,i)=>`<div class="week ${i>=p.ratedWeeks?'excluded':''}"><b>${escapeHTML(h.week.replace('s_','Saison ').replace('-',' · CW '))}</b><strong>${fmt.format(h.points)} P.</strong><small>${h.decks}/16 Decks · ${i>=p.ratedWeeks?'Nicht gewertet':Math.round(h.weight*100)+' % Gewicht'}</small></div>`).join('')}</div></td></tr>`:'';
   return main+detail;
  }).join('');
  document.querySelector('#empty').hidden=items.length>0;
@@ -56,6 +57,7 @@ function renderReview(){
  }));
 }
 function setView(review){
+ document.querySelector('#membership-panel').hidden=true;document.querySelector('#membership-view').setAttribute('aria-pressed','false');
  document.querySelector('#statistics-view').hidden=review;
  document.querySelector('#review-panel').hidden=!review;
  document.querySelector('#overview-view').setAttribute('aria-pressed',String(!review));
@@ -76,7 +78,23 @@ async function start(){
  const maxPoints=Math.max(...data.trend.map(w=>w.points)),maxDecks=Math.max(...data.trend.map(w=>w.decks));
  const change=(value,prior)=>{if(!prior)return '<span class="muted">–</span>';const pct=(value/prior-1)*100;return `<span class="${pct>=0?'positive':'negative'}">${pct>=0?'+':''}${pct.toLocaleString('de-AT',{maximumFractionDigits:1})} %</span>`};
  document.querySelector('#week-rows').innerHTML=data.trend.map((w,i)=>{const prior=data.trend[i+1];return `<div class="result-row ${i===0?'latest':''}" role="row"><div class="week-cell" role="cell"><strong>${escapeHTML(w.week.replace('s_','Saison ').replace('-',' · CW '))}</strong>${i===0?'<small>Aktuellster CW</small>':''}</div><div class="measure" role="cell"><strong>${fmt.format(w.points)}</strong><div class="track"><span class="points-fill" style="width:${(w.points/maxPoints*100).toFixed(1)}%"></span></div></div><div class="measure" role="cell"><strong>${fmt.format(w.decks)}</strong><div class="track"><span class="decks-fill" style="width:${(w.decks/maxDecks*100).toFixed(1)}%"></span></div></div><div class="change-cell" role="cell"><span>Punkte ${prior?change(w.points,prior.points):'–'}</span><span>Decks ${prior?change(w.decks,prior.decks):'–'}</span></div></div>`}).join('');
- renderReview();document.querySelector('#overview-view').addEventListener('click',()=>setView(false));document.querySelector('#review-view').addEventListener('click',()=>setView(true));
+ setupMembership();renderReview();document.querySelector('#overview-view').addEventListener('click',()=>setView(false));document.querySelector('#review-view').addEventListener('click',()=>setView(true));
  document.querySelector('#search').addEventListener('input',render);document.querySelector('#sort').addEventListener('change',render);render();
 }
 start().catch(()=>{document.querySelector('#rows').innerHTML='<tr><td colspan="7">Die Statistik konnte gerade nicht geladen werden.</td></tr>'});
+
+function setupMembership(){
+ const select=document.querySelector('#join-player'),tag=document.querySelector('#join-tag'),kind=document.querySelector('#join-kind'),dateInput=document.querySelector('#join-date');
+ dateInput.max=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Vienna'}).format(new Date());
+ const players=[...(data.membershipRecords??data.players)].sort((a,b)=>a.name.localeCompare(b.name,'de'));
+ select.innerHTML='<option value="">Neuen Spieler per Tag eintragen</option>'+players.map(p=>`<option value="${escapeHTML(p.tag)}">${escapeHTML(p.name)} · ${escapeHTML(p.tag)}</option>`).join('');
+ const mode=()=>{const exact=kind.value==='date';document.querySelector('#join-date-label').hidden=!exact;dateInput.required=exact;};
+ const populate=()=>{const p=players.find(p=>p.tag===select.value);tag.value=p?.tag??'';kind.value=p?.joinKind==='longstanding'?'longstanding':p?.joinKind==='date'?'date':'unknown';dateInput.value=p?.joinDate??'';document.querySelector('#join-current').textContent=p?`Gespeichert: ${joinDescription(p)}. Eine neue Angabe überschreibt diesen Wert.`:'Neuen Spieler mit eindeutigem Spielertag eintragen.';document.querySelector('#join-exception').hidden=!p?.membershipNote;document.querySelector('#join-feedback').textContent='';mode();};
+ select.addEventListener('change',populate);kind.addEventListener('change',mode);
+ tag.addEventListener('input',()=>{const p=players.find(p=>p.tag===tag.value.trim().toUpperCase());if(p){select.value=p.tag;populate();}else{select.value='';document.querySelector('#join-exception').hidden=true;}});
+ document.querySelector('#membership-view').addEventListener('click',()=>{document.querySelector('#statistics-view').hidden=true;document.querySelector('#review-panel').hidden=true;document.querySelector('#membership-panel').hidden=false;for(const id of ['overview-view','review-view'])document.querySelector('#'+id).setAttribute('aria-pressed','false');document.querySelector('#membership-view').setAttribute('aria-pressed','true');});
+ document.querySelector('#membership-list').innerHTML=players.map(p=>`<div class="membership-row"><div><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)} · ${escapeHTML(joinDescription(p))}</span>${memberNote(p)}</div><button type="button" data-edit="${escapeHTML(p.tag)}">Bearbeiten</button></div>`).join('');
+ document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>{select.value=b.dataset.edit;populate();document.querySelector('#membership-form').scrollIntoView({behavior:'smooth'});}));
+ document.querySelector('#membership-form').addEventListener('submit',e=>{e.preventDefault();const clean=tag.value.trim().toUpperCase().replace(/^#/,'');if(!/^[0289PYLQGRJCUV]{3,15}$/.test(clean)){document.querySelector('#join-feedback').textContent='Bitte einen gültigen Spielertag eingeben.';return;}const payload={tag:clean,kind:kind.value,date:kind.value==='date'?dateInput.value:null};const p=players.find(p=>p.tag==='#'+clean);const target=new URL('https://github.com/Andii176/austria-forever-clankrieg/issues/new');target.searchParams.set('title','[Clanbeitritt] '+(p?.name??'#'+clean));target.searchParams.set('body','CLAN_MEMBERSHIP_V1\n'+JSON.stringify(payload));window.open(target.href,'_blank','noopener,noreferrer');document.querySelector('#join-feedback').textContent='Noch nicht gespeichert: Den vorbereiteten Eintrag in GitHub mit „Create issue“ bestätigen. Nach der Verarbeitung diese Seite neu laden.';});
+ populate();
+}
