@@ -38,7 +38,7 @@ export function overlay(snapshot,stored){
  }
  data.players.sort((a,b)=>(a.points===null)-(b.points===null)||(b.points??0)-(a.points??0)||(b.participation??0)-(a.participation??0)||a.name.localeCompare(b.name,'de'));
  data.players.forEach((p,i)=>p.rank=p.points===null?null:i+1);
- data.membershipRecords=[...records.values()].map(r=>({tag:r.tag,name:r.name,joinKind:r.joinKind??'unknown',joinDate:r.joinDate??null,joinSource:r.source??'manual',joinDetectedAt:r.detectedAt??null,version:r.version??0,updatedAt:r.updatedAt??null,membershipNote:r.membershipNote??'',changes:r.changes??[]}));
+ data.membershipRecords=[...records.values()].map(r=>({tag:r.tag,name:r.name,previousNames:r.previousNames??[],joinKind:r.joinKind??'unknown',joinDate:r.joinDate??null,joinSource:r.source??'manual',joinDetectedAt:r.detectedAt??null,version:r.version??0,updatedAt:r.updatedAt??null,membershipNote:r.membershipNote??'',changes:r.changes??[]}));
  return data;
 }
 async function readSmall(request){

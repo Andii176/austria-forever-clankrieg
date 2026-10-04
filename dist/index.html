@@ -7,7 +7,7 @@
   <meta name="description" content="Aktuelle Clankrieg-Statistik von Austria forever: zeitgewichtetes Ranking, Teilnahme und Wochenverlauf.">
   <title>Clankrieg · Austria forever</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=membership-hourly-1">
+  <link rel="stylesheet" href="style.css?v=membership-names-1">
 </head>
 <body>
   <main class="shell">
@@ -51,7 +51,7 @@
     </section>
 <section id="membership-panel" class="panel" hidden aria-labelledby="membership-title">
 <div class="section-head"><div><span class="eyebrow">CLANLEITUNG</span><h2 id="membership-title">Clanbeitritte verwalten</h2></div></div>
-<p class="hint">Der Mitgliederstand wird stündlich geprüft. Bei neuen Spielern wird das Datum der ersten Erkennung automatisch hinterlegt. Bestehende Angaben und die ursprünglichen Eintritte zurückkehrender Spieler werden nicht automatisch überschrieben. Ein kurzer Eintritt und Austritt zwischen zwei Prüfungen kann unbemerkt bleiben.</p>
+<p class="hint">Der Mitgliederstand wird stündlich geprüft. Bei neuen Spielern wird das Datum der ersten Erkennung automatisch hinterlegt. Bestehende Angaben und die ursprünglichen Eintritte zurückkehrender Spieler werden nicht automatisch überschrieben. Umbenennungen werden über den unveränderten Spielertag erkannt: Eintritt und CW-Verlauf bleiben erhalten, frühere Namen werden angezeigt. Die Namenshistorie wird ab jetzt aufgezeichnet. Ein kurzer Eintritt und Austritt zwischen zwei Prüfungen kann unbemerkt bleiben.</p>
 <p>Eintrittsdaten gelten für die gemeinsame Statistik und bleiben bei Wochenupdates erhalten. Vorbelegte Angaben und Datumswerte können jederzeit überschrieben werden.</p>
 <form id="membership-form" class="membership-form">
 <label>Spieler auswählen<select id="join-player"><option value="">Neuen Spieler per Tag eintragen</option></select></label>
@@ -69,7 +69,7 @@
     <details class="method"><summary>So wird das Ranking berechnet</summary><div class="method-body"><p>Die drei neuesten Clankriege zählen je 100 %. Danach sinkt das Gewicht pro Woche auf 90, 80, 70, 60, 50, 40 und 30 %. Die gewichteten Punkte werden durch die Summe der berücksichtigten Wochengewichte geteilt. Für die Teilnahme werden die gespielten Decks mit denselben Gewichten ins Verhältnis zu 16 möglichen Decks pro Woche gesetzt.</p><p>Hinterlegte Eintrittsdaten bestimmen den Wertungsbeginn. Ohne diese Angabe beginnt die Wertung mit der ersten sichtbaren Teilnahme im betrachteten Zeitraum. Frühere Nullwochen zählen nicht. Nullwochen nach diesem Beginn zählen vollständig mit, auch bei späterer Inaktivität. Für Reinigungslord2 und HEXE OP zählen ausdrücklich alle Wochen seit der ersten sichtbaren Teilnahme, einschließlich zwischenzeitlicher Austritte. Dies ist bei beiden Spielern vermerkt. Der Beginn wird gespeichert und bei künftigen Aktualisierungen fortgeführt. Ohne hinterlegtes Datum ist der Wertungsbeginn geschätzt. Die Vorbelegung „länger als 10 Wochen“ ist eine Annahme anhand der zehn gewerteten CW und kann korrigiert werden. Wer schon länger dabei war, aber zunächst nicht gespielt hat, kann dadurch zu günstig bewertet werden. Die Kategorie richtet sich nach den gewichteten Punkten je CW: Elite ab 2.800, Stark ab 2.300, Solide ab 1.800, Schwach ab 1.200, darunter Kritisch.</p><p>Quelle: RoyaleAPI-Export. Der genaue Datenstand steht oben auf der Seite.</p></div></details>
     <footer>Austria forever · #QY2CRJUQ</footer>
   </main>
-  <script src="config.js?v=membership-hourly-1"></script>
-  <script src="app.js?v=membership-hourly-1" defer></script>
+  <script src="config.js?v=membership-names-1"></script>
+  <script src="app.js?v=membership-names-1" defer></script>
 </body>
 </html>

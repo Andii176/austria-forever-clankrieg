@@ -1,5 +1,5 @@
 const fmt=new Intl.NumberFormat('de-AT');
-const memberNote=p=>p.membershipNote?`<span class="membership-note">${escapeHTML(p.membershipNote)}</span>`:'';
+const memberNote=p=>(p.previousNames?.length?`<span class="membership-note">Früher: ${p.previousNames.map(escapeHTML).join(' → ')}</span>`:'')+(p.membershipNote?`<span class="membership-note">${escapeHTML(p.membershipNote)}</span>`:'');
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const joinDescription=p=>p.joinKind==='date'&&p.joinDate?(p.joinSource==='observed'?'Beitritt erkannt: ':'Eintritt: ')+p.joinDate.split('-').reverse().join('.'):p.joinKind==='longstanding'?'Länger als 10 Wochen dabei':'Eintritt unbekannt';
 const clanAPI=String(window.CLAN_API??'').replace(/\/$/,'');
@@ -7,7 +7,7 @@ let data,openTag=null;
 function render(){
  const q=document.querySelector('#search').value.trim().toLocaleLowerCase('de');
  const sort=document.querySelector('#sort').value;
- const items=data.players.filter(p=>`${p.name} ${p.tag}`.toLocaleLowerCase('de').includes(q));
+ const items=data.players.filter(p=>`${p.name} ${p.tag} ${(p.previousNames??[]).join(" ")}`.toLocaleLowerCase('de').includes(q));
  if(sort==='activity')items.sort((a,b)=>(b.participation??-1)-(a.participation??-1)||a.rank-b.rank);
  if(sort==='last')items.sort((a,b)=>b.lastDecks-a.lastDecks||b.lastPoints-a.lastPoints);
  if(sort==='name')items.sort((a,b)=>a.name.localeCompare(b.name,'de'));

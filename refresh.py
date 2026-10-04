@@ -102,6 +102,11 @@ def calculate(rows, current, weeks, state):
         else:
             member = {'new': True, 'since': weeks[0] if history[0]['decks'] else None,
                       'first_seen': weeks[0], 'estimated': True}
+        previous_names = list(member.get('previous_names', []))
+        old_name = member.get('name')
+        if old_name and old_name != row['player_name'] and old_name not in previous_names:
+            previous_names.append(old_name)
+        member['previous_names'] = previous_names
         member['name'] = row['player_name']
         members[tag] = member
         if member.get('join_kind') == 'date' and tag not in REJOIN_NOTES:
@@ -122,7 +127,7 @@ def calculate(rows, current, weeks, state):
         participation = round(100*sum(h['decks']*h['weight'] for h in rated)/(16*denominator), 1) if denominator else None
         category = ('Elite' if points >= 2800 else 'Stark' if points >= 2300 else
                     'Solide' if points >= 1800 else 'Schwach' if points >= 1200 else 'Kritisch') if points is not None else 'Noch offen'
-        players.append({'name': row['player_name'], 'tag': '#'+tag, 'new': member['new'],
+        players.append({'name': row['player_name'], 'previousNames': [n for n in previous_names if n != row['player_name']], 'tag': '#'+tag, 'new': member['new'],
                         'ratedWeeks': len(rated), 'points': points, 'participation': participation,
                         'lastDecks': history[0]['decks'], 'lastPoints': history[0]['points'],
                         'lastThree': sum(h['decks'] for h in rated[:3]),
@@ -146,7 +151,7 @@ def calculate(rows, current, weeks, state):
               'decks': sum(int(r[w+'_decks_used'] or 0) for r in rows),
               'active': sum(int(r[w+'_decks_used'] or 0) > 0 for r in rows)}
              for i, w in enumerate(weeks)]
-    records = [{'tag': '#'+tag, 'name': m.get('name', '#'+tag),
+    records = [{'tag': '#'+tag, 'name': m.get('name', '#'+tag), 'previousNames': [n for n in m.get('previous_names', []) if n != m.get('name')],
                 'joinKind': m.get('join_kind', 'unknown'), 'joinDate': m.get('join_date'),
                 'membershipNote': REJOIN_NOTES.get(tag, '')}
                for tag, m in members.items()]

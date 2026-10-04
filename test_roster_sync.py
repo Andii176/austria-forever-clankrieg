@@ -9,6 +9,22 @@ B={'tag':'#PYLQGRJ','name':'Neu'}
 
 
 class RosterTests(unittest.TestCase):
+    def test_rename_keeps_membership_and_old_names(self):
+        old=json.loads((ROOT/'backend/fixture.json').read_text())
+        tag=A['tag'].lstrip('#')
+        state={'last_week':old['weeks'][0],'week_end_dates':old['weekEndDates'], 'members':{
+            tag:{'name':'mourise','new':False,'since':old['weeks'][-1],
+                 'first_seen':old['weeks'][-1],'estimated':False,'join_kind':'longstanding'}}}
+        tracker={}
+        result, state=current_snapshot(old,state,tracker,[],[dict(A,name='Neuer Name')],'2026-10-05T01:37:00+02:00')
+        self.assertEqual(result['players'][0]['previousNames'],['mourise'])
+        self.assertEqual(result['players'][0]['ratedWeeks'],10)
+        self.assertFalse(state['members'][tag]['new'])
+        result, state=current_snapshot(result,state,tracker,[],[dict(A,name='Neuer Name')],'2026-10-05T02:37:00+02:00')
+        self.assertEqual(result['players'][0]['previousNames'],['mourise'])
+        result, state=current_snapshot(result,state,tracker,[],[A],'2026-10-05T03:37:00+02:00')
+        self.assertEqual(result['players'][0]['previousNames'],['Neuer Name'])
+
     def test_initial_members_are_not_assigned_new_join_dates(self):
         tracker, requests=plan_roster({},[A],[],'2026-10-05T00:30:00+02:00')
         self.assertEqual(requests,[])
