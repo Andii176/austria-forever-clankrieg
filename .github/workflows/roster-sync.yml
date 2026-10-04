@@ -34,7 +34,7 @@ jobs:
         run: python3 -m unittest -v test_roster_sync.py
       - name: Aktuellen Mitgliederstand abrufen
         env:
-          CLASH_ROYALE_API_TOKEN: ${{ secrets.CLASH_ROYALE_API_TOKEN }}
+          CLASH_ROYALE_API_TOKEN: ${{ secrets.CLASH_ROYAL_API_TOKEN || secrets.CLASH_ROYALE_API_TOKEN }}
         run: python3 roster_sync.py
       - name: Mitgliederstand speichern
         run: |

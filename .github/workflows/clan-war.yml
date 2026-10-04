@@ -36,7 +36,7 @@ jobs:
       - name: Offizielle Clash-Royale-Daten auswerten
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         env:
-          CLASH_ROYALE_API_TOKEN: ${{ secrets.CLASH_ROYALE_API_TOKEN }}
+          CLASH_ROYALE_API_TOKEN: ${{ secrets.CLASH_ROYAL_API_TOKEN || secrets.CLASH_ROYALE_API_TOKEN }}
         run: python3 refresh.py ${{ inputs.verify_only && '--verify' || '' }}
       - name: Neuen Datenstand speichern
         if: github.event_name != 'push' && !inputs.verify_only
