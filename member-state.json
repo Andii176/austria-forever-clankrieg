@@ -17,6 +17,23 @@
       "name": "m4di",
       "previous_names": []
     },
+    "2J08GVQ20": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "PrinceRaimi",
+      "previous_names": []
+    },
+    "CCJV028QU": {
+      "new": true,
+      "since": "s_136-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "wolverine",
+      "previous_names": []
+    },
     "PLQ9GC0R": {
       "new": true,
       "since": "s_136-3",
@@ -25,13 +42,39 @@
       "name": "ZapMyPekka",
       "previous_names": []
     },
-    "J9U029LVC": {
+    "RQJRQU09G": {
       "new": true,
       "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
       "join_kind": "longstanding",
-      "name": "Talha",
+      "name": "Goltoro",
+      "previous_names": []
+    },
+    "UPC8C8RRP": {
+      "new": true,
+      "since": null,
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "doskeiLöq",
+      "previous_names": []
+    },
+    "9CRQJVRGL": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "stophi",
+      "previous_names": []
+    },
+    "P8GPU0U0": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "brusetta",
       "previous_names": []
     },
     "2C22JQL2": {
@@ -41,6 +84,15 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "AustrianEvil",
+      "previous_names": []
+    },
+    "J9U029LVC": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Talha",
       "previous_names": []
     },
     "P92CRCG2J": {
@@ -105,15 +157,6 @@
       "name": "ynsclk",
       "previous_names": []
     },
-    "RQJRQU09G": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Goltoro",
-      "previous_names": []
-    },
     "L2C2QYYJ": {
       "new": true,
       "since": "s_134-3",
@@ -121,24 +164,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "samsirapo",
-      "previous_names": []
-    },
-    "9CRQJVRGL": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "stophi",
-      "previous_names": []
-    },
-    "P8GPU0U0": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "brusetta",
       "previous_names": []
     },
     "2R8JGP88": {
@@ -155,31 +180,6 @@
       "first_seen": "s_136-3",
       "estimated": true,
       "name": "Ado47",
-      "previous_names": []
-    },
-    "CCJV028QU": {
-      "new": true,
-      "since": "s_136-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "wolverine",
-      "previous_names": []
-    },
-    "UPC8C8RRP": {
-      "new": true,
-      "since": null,
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "doskeiLöq",
-      "previous_names": []
-    },
-    "2J08GVQ20": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "PrinceRaimi",
       "previous_names": []
     },
     "9JGVP90J": {
