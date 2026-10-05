@@ -1,6 +1,24 @@
 {
   "last_week": "s_136-4",
   "members": {
+    "VPLR8G9RV": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "ynsclk",
+      "previous_names": []
+    },
+    "9CRQJVRGL": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "stophi",
+      "previous_names": []
+    },
     "RQJRQU09G": {
       "new": true,
       "since": "s_134-3",
@@ -8,6 +26,15 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "Goltoro",
+      "previous_names": []
+    },
+    "2C22JQL2": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "AustrianEvil",
       "previous_names": []
     },
     "P92CRCG2J": {
@@ -25,24 +52,6 @@
       "first_seen": "s_136-3",
       "estimated": true,
       "name": "ZapMyPekka",
-      "previous_names": []
-    },
-    "2C22JQL2": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "AustrianEvil",
-      "previous_names": []
-    },
-    "9CRQJVRGL": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "stophi",
       "previous_names": []
     },
     "22P09PRCV": {
@@ -128,15 +137,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "PrinceRaimi",
-      "previous_names": []
-    },
-    "VPLR8G9RV": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "ynsclk",
       "previous_names": []
     },
     "J9U029LVC": {
