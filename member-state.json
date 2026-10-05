@@ -9,6 +9,42 @@
       "name": "DaneiBPM",
       "previous_names": []
     },
+    "J9U029LVC": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Talha",
+      "previous_names": []
+    },
+    "2C22JQL2": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "AustrianEvil",
+      "previous_names": []
+    },
+    "P92CRCG2J": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Electroboy",
+      "previous_names": []
+    },
+    "8Y9ULRGY8": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Equick",
+      "previous_names": []
+    },
     "202YUPQVCL": {
       "new": true,
       "since": "s_136-1",
@@ -51,15 +87,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "ynsclk",
-      "previous_names": []
-    },
-    "8Y9ULRGY8": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Equick",
       "previous_names": []
     },
     "PLQ9GC0R": {
@@ -105,15 +132,6 @@
       "name": "stophi",
       "previous_names": []
     },
-    "J9U029LVC": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Talha",
-      "previous_names": []
-    },
     "P8GPU0U0": {
       "new": true,
       "since": "s_134-3",
@@ -131,15 +149,6 @@
       "name": "Malibu",
       "previous_names": []
     },
-    "P92CRCG2J": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Electroboy",
-      "previous_names": []
-    },
     "JGJV9JCL": {
       "new": true,
       "since": null,
@@ -154,15 +163,6 @@
       "first_seen": "s_136-3",
       "estimated": true,
       "name": "wolverine",
-      "previous_names": []
-    },
-    "2C22JQL2": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "AustrianEvil",
       "previous_names": []
     },
     "UPC8C8RRP": {
