@@ -1,15 +1,6 @@
 {
   "last_week": "s_136-3",
   "members": {
-    "9CRQJVRGL": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "stophi",
-      "previous_names": []
-    },
     "P8GPU0U0": {
       "new": true,
       "since": "s_134-3",
@@ -19,13 +10,13 @@
       "name": "brusetta",
       "previous_names": []
     },
-    "2C22JQL2": {
+    "9CRQJVRGL": {
       "new": true,
       "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
       "join_kind": "longstanding",
-      "name": "AustrianEvil",
+      "name": "stophi",
       "previous_names": []
     },
     "22P09PRCV": {
@@ -34,6 +25,24 @@
       "first_seen": "s_136-3",
       "estimated": true,
       "name": "m4di",
+      "previous_names": []
+    },
+    "L2C2QYYJ": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "samsirapo",
+      "previous_names": []
+    },
+    "2C22JQL2": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "AustrianEvil",
       "previous_names": []
     },
     "8Y9G2CJJ": {
@@ -163,15 +172,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "simtac",
-      "previous_names": []
-    },
-    "L2C2QYYJ": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "samsirapo",
       "previous_names": []
     },
     "JGJV9JCL": {
