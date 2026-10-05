@@ -188,18 +188,13 @@ def main():
         print(f'API matches CSV totals for {len(shared)} shared weeks; '
               f'{len(current)} current members')
         return
-    for attempt in range(3):
-        rows, current, weeks = parse(
-            fetch_json(clan_path + '/riverracelog?limit=10', token),
-            fetch_json(clan_path + '/members?limit=50', token),
-        )
-        if weeks[0] != state['last_week']:
-            break
-        if attempt < 2:
-            print('Source still shows the previous CW; retrying in 10 minutes', flush=True)
-            time.sleep(600)
-    else:
-        raise ValueError('No new completed CW in API log; existing site preserved')
+    rows, current, weeks = parse(
+        fetch_json(clan_path + '/riverracelog?limit=10', token),
+        fetch_json(clan_path + '/members?limit=50', token),
+    )
+    if weeks[0] == state['last_week']:
+        print('Noch kein neuer abgeschlossener CW; vorhandenes Ranking bleibt erhalten. Weitere Montagsprüfung laut Zeitplan.')
+        return
     if len(weeks) < 2 or weeks[1] != state['last_week']:
         raise ValueError('More than one week changed or columns were reordered; manual review needed')
     data, next_state = calculate(rows, current, weeks, state)

@@ -27,3 +27,7 @@ Eintrittszeitpunkte bleiben Näherungen zwischen zwei Prüfungen. Sehr kurze Mit
 ## Aktueller CW
 
 `live-war.yml` ruft Donnerstag bis Montag jeweils 12:15 Uhr (Europe/Vienna, Sommer-/Winterzeit automatisch) den aktuellen River Race ab. Die Seite zeigt den Zwischenstand mit Punkten und Decks je Teilnehmer getrennt vom abgeschlossenen Zehn-Wochen-Ranking. Am Montag nach dem Wechsel zur Trainingswoche wird der letzte abgeschlossene CW aus dem Log angezeigt. Mitgliederprüfung bleibt stündlich. Alle drei Workflows teilen eine Concurrency-Gruppe und lesen den aktuellen main-Stand vor Änderungen. GitHub kann geplante Starts verzögern.
+
+## Montag bevorzugt prüfen
+
+Montags erfolgen Ranking- und CW-Abgleich um 12:10, 12:30 und 12:50 Uhr Europe/Vienna. Weitere Prüfungen ändern das Ranking nicht, wenn noch kein neuer abgeschlossener CW vorliegt oder dieser bereits importiert wurde. Alle Veröffentlichungen verwenden `queue: max`, damit wartende Ranking-Läufe nicht von der Mitgliederprüfung ersetzt werden. GitHub garantiert keine pünktliche Ausführung. Donnerstag bis Sonntag bleibt der CW-Zwischenstand auf 12:15 Uhr.

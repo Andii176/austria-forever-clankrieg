@@ -1,7 +1,9 @@
 name: Aktuellen Clankrieg täglich aktualisieren
 on:
   schedule:
-    - cron: '15 12 * * 0,1,4,5,6'
+    - cron: '15 12 * * 0,4,5,6'
+      timezone: Europe/Vienna
+    - cron: '10,30,50 12 * * 1'
       timezone: Europe/Vienna
   workflow_dispatch:
   push:
@@ -17,6 +19,7 @@ permissions:
 concurrency:
   group: clan-war-pages
   cancel-in-progress: false
+  queue: max
 jobs:
   sync:
     runs-on: ubuntu-latest
