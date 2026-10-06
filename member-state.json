@@ -1,6 +1,31 @@
 {
   "last_week": "s_136-4",
   "members": {
+    "LPGPRPRL8": {
+      "new": true,
+      "since": "s_136-2",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "mourise",
+      "previous_names": []
+    },
+    "P8GPU0U0": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "brusetta",
+      "previous_names": []
+    },
+    "22P09PRCV": {
+      "new": true,
+      "since": "s_135-5",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "m4di",
+      "previous_names": []
+    },
     "VPLR8G9RV": {
       "new": true,
       "since": "s_134-3",
@@ -34,15 +59,6 @@
       "first_seen": "s_136-3",
       "estimated": true,
       "name": "wolverine",
-      "previous_names": []
-    },
-    "P8GPU0U0": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "brusetta",
       "previous_names": []
     },
     "P92CRCG2J": {
@@ -122,14 +138,6 @@
       "name": "Malibu",
       "previous_names": []
     },
-    "22P09PRCV": {
-      "new": true,
-      "since": "s_135-5",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "m4di",
-      "previous_names": []
-    },
     "202YUPQVCL": {
       "new": true,
       "since": "s_136-1",
@@ -198,14 +206,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "Grillinator",
-      "previous_names": []
-    },
-    "LPGPRPRL8": {
-      "new": true,
-      "since": "s_136-2",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "mourise",
       "previous_names": []
     },
     "J0V0UUYVG": {
