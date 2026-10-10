@@ -1,6 +1,14 @@
 {
   "last_week": "s_136-4",
   "members": {
+    "22P09PRCV": {
+      "new": true,
+      "since": "s_135-5",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "m4di",
+      "previous_names": []
+    },
     "2CPQQQ28U": {
       "new": true,
       "since": "s_134-3",
@@ -17,14 +25,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "AustrianEvil",
-      "previous_names": []
-    },
-    "22P09PRCV": {
-      "new": true,
-      "since": "s_135-5",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "m4di",
       "previous_names": []
     },
     "P8GPU0U0": {
