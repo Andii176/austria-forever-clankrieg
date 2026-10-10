@@ -1,6 +1,15 @@
 {
   "last_week": "s_136-4",
   "members": {
+    "P8GPU0U0": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "brusetta",
+      "previous_names": []
+    },
     "VJYR0CCU2": {
       "new": true,
       "since": "s_134-3",
@@ -42,15 +51,6 @@
       "first_seen": "s_136-3",
       "estimated": true,
       "name": "mourise",
-      "previous_names": []
-    },
-    "P8GPU0U0": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "brusetta",
       "previous_names": []
     },
     "RQJRQU09G": {
@@ -207,6 +207,14 @@
       "name": "Da Bomba",
       "previous_names": []
     },
+    "RJJUQYQVP": {
+      "new": true,
+      "since": "s_136-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "willi",
+      "previous_names": []
+    },
     "GPGRCP0C9": {
       "new": true,
       "since": "s_134-3",
@@ -214,14 +222,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "Vollpfosten",
-      "previous_names": []
-    },
-    "RJJUQYQVP": {
-      "new": true,
-      "since": "s_136-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "willi",
       "previous_names": []
     },
     "2C2C9YLYG": {
