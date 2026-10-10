@@ -1,6 +1,15 @@
 {
   "last_week": "s_136-4",
   "members": {
+    "P8GPU0U0": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "brusetta",
+      "previous_names": []
+    },
     "P92CRCG2J": {
       "new": true,
       "since": "s_134-3",
@@ -43,15 +52,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "AustrianEvil",
-      "previous_names": []
-    },
-    "P8GPU0U0": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "brusetta",
       "previous_names": []
     },
     "VJYR0CCU2": {
