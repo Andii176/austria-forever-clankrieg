@@ -112,8 +112,6 @@ function setView(review){
 
 async function start(){
  const response=await fetch(clanAPI?clanAPI+'/api/data':'data.json',{cache:'no-store'});if(!response.ok)throw new Error('Daten nicht verfügbar');data=await response.json();
- const completedDate=data.weekEndDates?.[data.weeks[0]];
- document.querySelector('#as-of').textContent='CW-Ranking bis '+(completedDate?completedDate.split('-').reverse().join('.'):data.asOf);
  const timestamps=[data.rosterAsOf,data.liveWar?.checkedAt,...(data.membershipRecords??[]).map(r=>r.updatedAt)].filter(t=>t&&Number.isFinite(Date.parse(t)));
  const updated=document.querySelector('#updated-at');
  if(timestamps.length){updated.hidden=false;updated.textContent='Zuletzt aktualisiert: '+new Date(Math.max(...timestamps.map(Date.parse))).toLocaleString('de-AT',{timeZone:'Europe/Vienna'});}
