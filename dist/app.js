@@ -150,7 +150,7 @@ function renderReview(){
  }).join('');
 }
 function setView(view){
- const views={clan:['statistics-view','overview-view'],members:['members-panel','members-view'],review:['review-panel','review-view'],membership:['membership-panel','membership-view']};
+ const views={clan:['statistics-view','overview-view'],members:['members-panel','members-view'],review:['review-panel','review-view']};
  for(const [key,[panel,button]] of Object.entries(views)){
   document.querySelector('#'+panel).hidden=key!==view;
   document.querySelector('#'+button).setAttribute('aria-pressed',String(key===view));
@@ -189,37 +189,8 @@ async function start(){
  const maxPoints=Math.max(...data.trend.map(w=>w.points)),maxDecks=Math.max(...data.trend.map(w=>w.decks));
  const change=(value,prior)=>{if(!prior)return '<span class="muted">–</span>';const pct=(value/prior-1)*100;return `<span class="${pct>=0?'positive':'negative'}">${pct>=0?'+':''}${pct.toLocaleString('de-AT',{maximumFractionDigits:1})} %</span>`};
  document.querySelector('#week-rows').innerHTML=data.trend.map((w,i)=>{const prior=data.trend[i+1];return `<div class="result-row ${i===0?'latest':''}" role="row"><div class="week-cell" role="cell"><strong>${escapeHTML(w.week.replace('s_','Saison ').replace('-',' · CW '))}</strong>${i===0?'<small>Aktuellster CW</small>':''}</div><div class="measure" role="cell"><strong>${fmt.format(w.points)}</strong><div class="track"><span class="points-fill" style="width:${(w.points/maxPoints*100).toFixed(1)}%"></span></div></div><div class="measure" role="cell"><strong>${fmt.format(w.decks)}</strong><div class="track"><span class="decks-fill" style="width:${(w.decks/maxDecks*100).toFixed(1)}%"></span></div></div><div class="change-cell" role="cell"><span>Punkte ${prior?change(w.points,prior.points):'–'}</span><span>Decks ${prior?change(w.decks,prior.decks):'–'}</span></div></div>`}).join('');
- setupMembership();renderReview();renderPodiums();document.querySelector('#overview-view').addEventListener('click',()=>setView('clan'));document.querySelector('#members-view').addEventListener('click',()=>setView('members'));document.querySelector('#review-view').addEventListener('click',()=>setView('review'));
+ renderReview();renderPodiums();document.querySelector('#overview-view').addEventListener('click',()=>setView('clan'));document.querySelector('#members-view').addEventListener('click',()=>setView('members'));document.querySelector('#review-view').addEventListener('click',()=>setView('review'));
  document.querySelector('#search').addEventListener('input',render);document.querySelector('#sort').addEventListener('change',render);render();
 }
 start().catch(()=>{document.querySelector('#rows').innerHTML='<tr><td colspan="8">Die Statistik konnte gerade nicht geladen werden.</td></tr>'});
 
-function setupMembership(){
- const select=document.querySelector('#join-player'),tag=document.querySelector('#join-tag'),kind=document.querySelector('#join-kind'),dateInput=document.querySelector('#join-date');
- dateInput.max=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Vienna'}).format(new Date());
- const players=[...(data.membershipRecords??data.players)].sort((a,b)=>a.name.localeCompare(b.name,'de'));
- select.innerHTML='<option value="">Neuen Spieler per Tag eintragen</option>'+players.map(p=>`<option value="${escapeHTML(p.tag)}">${escapeHTML(p.name)} · ${escapeHTML(p.tag)}</option>`).join('');
- const mode=()=>{const exact=kind.value==='date';document.querySelector('#join-date-label').hidden=!exact;dateInput.required=exact;};
- const populate=()=>{const p=players.find(p=>p.tag===select.value);tag.value=p?.tag??'';kind.value=p?.joinKind==='longstanding'?'longstanding':p?.joinKind==='date'?'date':'unknown';dateInput.value=p?.joinDate??'';document.querySelector('#join-current').textContent=p?`Gespeichert: ${joinDescription(p)}. Eine neue Angabe überschreibt diesen Wert.`:'Neuen Spieler mit eindeutigem Spielertag eintragen.';document.querySelector('#join-exception').hidden=!p?.membershipNote;document.querySelector('#join-feedback').textContent='';document.querySelector('#join-history').textContent=(p?.changes??[]).slice().reverse().map(h=>`${new Date(h.changedAt).toLocaleString('de-AT',{timeZone:'Europe/Vienna'})} · vorher: ${h.kind==='date'?h.date:h.kind==='longstanding'?'länger als 10 Wochen':h.kind==='unknown'?'unbekannt':'Vorbelegung'}`).join(' | ');mode();};
- select.addEventListener('change',populate);kind.addEventListener('change',mode);
- tag.addEventListener('input',()=>{const p=players.find(p=>p.tag===tag.value.trim().toUpperCase());if(p){select.value=p.tag;populate();}else{select.value='';document.querySelector('#join-exception').hidden=true;}});
- document.querySelector('#membership-view').addEventListener('click',()=>setView('membership'));
- document.querySelector('#membership-list').innerHTML=players.map(p=>`<div class="membership-row"><div><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)} · ${escapeHTML(joinDescription(p))}</span>${memberNote(p)}</div><button type="button" data-edit="${escapeHTML(p.tag)}">Bearbeiten</button></div>`).join('');
- document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>{select.value=b.dataset.edit;populate();document.querySelector('#membership-form').scrollIntoView({behavior:'smooth'});}));
- document.querySelector('#membership-form').addEventListener('submit',async e=>{
-  e.preventDefault();const button=e.submitter??document.querySelector('#membership-form button[type=submit]'),feedback=document.querySelector('#join-feedback');
-  if(!clanAPI){feedback.textContent='Der zentrale Speicherdienst ist noch nicht eingerichtet.';return;}
-  const clean=tag.value.trim().toUpperCase().replace(/^#/,'');
-  if(!/^[0289PYLQGRJCUV]{3,15}$/.test(clean)){feedback.textContent='Bitte einen gültigen Spielertag eingeben.';return;}
-  const p=players.find(p=>p.tag==='#'+clean),payload={tag:clean,kind:kind.value,date:kind.value==='date'?dateInput.value:null,version:p?.version??0};
-  button.disabled=true;feedback.textContent='Wird gespeichert…';
-  try{
-   const response=await fetch(clanAPI+'/api/memberships',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-   const result=await response.json();if(!response.ok)throw new Error(result.error??'Speichern fehlgeschlagen.');
-   sessionStorage.setItem('clan-membership-saved',p?.name??'#'+clean);window.location.reload();
-  }catch(error){feedback.textContent=error.message==='Failed to fetch'?'Speichern nicht erreichbar. Es wurde keine Bestätigung empfangen; bitte neu laden und prüfen.':error.message;button.disabled=false;}
- });
- populate();
- const saved=sessionStorage.getItem('clan-membership-saved');if(saved){sessionStorage.removeItem('clan-membership-saved');document.querySelector('#join-feedback').textContent=`Eintritt für ${saved} gespeichert. Die gemeinsame Wertung wurde aktualisiert.`;document.querySelector('#membership-view').click();}
- if(!clanAPI){document.querySelector('#membership-form button[type=submit]').disabled=true;document.querySelector('#join-feedback').textContent='Der zentrale Speicherdienst ist noch nicht eingerichtet.';}
-}
