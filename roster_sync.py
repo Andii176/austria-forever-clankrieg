@@ -54,7 +54,7 @@ def current_snapshot(old, state, tracker, api_rows, roster, observed_at):
     rows = []
     for member in roster:
         tag = member['tag'].lstrip('#')
-        row = {'player_tag': tag, 'player_name': member['name']}
+        row = {'player_tag': tag, 'player_name': member['name'], 'player_role': member.get('role')}
         api_row = api_by_tag.get(tag, {})
         history = archive.setdefault(tag, {})
         for w in old['weeks']:

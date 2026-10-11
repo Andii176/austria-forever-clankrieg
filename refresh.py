@@ -66,6 +66,7 @@ def parse(log, roster):
                                            'player_name': member['name']})
         row['player_name'] = member['name']
         row['player_is_current_member'] = 'true'
+        row['player_role'] = member.get('role')
     rows = list(rows_by_tag.values())
     if not all(r.get('player_tag') for r in rows):
         raise ValueError('Missing player tag in API result')
@@ -108,6 +109,8 @@ def calculate(rows, current, weeks, state):
             previous_names.append(old_name)
         member['previous_names'] = previous_names
         member['name'] = row['player_name']
+        if row.get('player_role') is not None:
+            member['role'] = row['player_role']
         members[tag] = member
         if member.get('join_kind') == 'date' and tag not in REJOIN_NOTES:
             rated = [h for h in history if member['join_date'] < end_dates[h['week']]]
@@ -127,7 +130,7 @@ def calculate(rows, current, weeks, state):
         participation = round(100*sum(h['decks']*h['weight'] for h in rated)/(16*denominator), 1) if denominator else None
         category = ('Elite' if points >= 2800 else 'Stark' if points >= 2300 else
                     'Solide' if points >= 1800 else 'Schwach' if points >= 1200 else 'Kritisch') if points is not None else 'Noch offen'
-        players.append({'name': row['player_name'], 'previousNames': [n for n in previous_names if n != row['player_name']], 'tag': '#'+tag, 'new': member['new'],
+        players.append({'name': row['player_name'], 'role': member.get('role'), 'previousNames': [n for n in previous_names if n != row['player_name']], 'tag': '#'+tag, 'new': member['new'],
                         'ratedWeeks': len(rated), 'points': points, 'participation': participation,
                         'lastDecks': history[0]['decks'], 'lastPoints': history[0]['points'],
                         'lastThree': sum(h['decks'] for h in rated[:3]),
@@ -151,7 +154,7 @@ def calculate(rows, current, weeks, state):
               'decks': sum(int(r[w+'_decks_used'] or 0) for r in rows),
               'active': sum(int(r[w+'_decks_used'] or 0) > 0 for r in rows)}
              for i, w in enumerate(weeks)]
-    records = [{'tag': '#'+tag, 'name': m.get('name', '#'+tag), 'previousNames': [n for n in m.get('previous_names', []) if n != m.get('name')],
+    records = [{'tag': '#'+tag, 'role': m.get('role'), 'name': m.get('name', '#'+tag), 'previousNames': [n for n in m.get('previous_names', []) if n != m.get('name')],
                 'joinKind': m.get('join_kind', 'unknown'), 'joinDate': m.get('join_date'),
                 'membershipNote': REJOIN_NOTES.get(tag, '')}
                for tag, m in members.items()]

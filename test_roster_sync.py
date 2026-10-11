@@ -25,6 +25,23 @@ class RosterTests(unittest.TestCase):
         result, state=current_snapshot(result,state,tracker,[],[A],'2026-10-05T03:37:00+02:00')
         self.assertEqual(result['players'][0]['previousNames'],['Neuer Name'])
 
+    def test_role_changes_are_imported_without_changing_war_history(self):
+        old=json.loads((ROOT/'backend/fixture.json').read_text())
+        tag=A['tag'].lstrip('#')
+        state={'last_week':old['weeks'][0], 'week_end_dates':old['weekEndDates'], 'members':{
+            tag:{'name':A['name'],'new':False,'since':old['weeks'][-1],
+                 'first_seen':old['weeks'][-1],'estimated':False,'join_kind':'longstanding'}}}
+        tracker={}
+        result,state=current_snapshot(old,state,tracker,[],[dict(A,role='member')],'2026-10-11T17:37:00+02:00')
+        before=result['players'][0]['history']
+        self.assertEqual(result['players'][0]['role'],'member')
+        result,state=current_snapshot(result,state,tracker,[],[dict(A,role='coLeader')],'2026-10-11T19:37:00+02:00')
+        self.assertEqual(result['players'][0]['role'],'coLeader')
+        self.assertEqual(state['members'][tag]['role'],'coLeader')
+        self.assertEqual(result['membershipRecords'][0]['role'],'coLeader')
+        self.assertEqual(result['players'][0]['history'],before)
+        self.assertEqual(result['players'][0]['ratedWeeks'],10)
+
     def test_initial_members_are_not_assigned_new_join_dates(self):
         tracker, requests=plan_roster({},[A],[],'2026-10-05T00:30:00+02:00')
         self.assertEqual(requests,[])
