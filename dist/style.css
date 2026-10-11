@@ -29,3 +29,9 @@
 .review-history .low-week{border-color:#ff697c;background:#422b39}
 .review-card:has(.review-player-details[open]){grid-column:1/-1}
 .review-card:has(.review-player-details[open]) .week-grid{grid-template-columns:repeat(auto-fit,minmax(115px,1fr))}
+
+.rating-delta{display:block;font-size:.67rem;font-weight:500;line-height:1.4;margin-top:5px;white-space:normal;font-variant-numeric:tabular-nums}
+.review-card dd{text-align:right}
+.update{display:grid;gap:5px;text-align:right}
+.update small{font-size:.73rem;color:#91a6bd}
+@media(max-width:610px){.update{text-align:left}.rating-delta{font-size:.68rem}}

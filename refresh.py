@@ -198,6 +198,8 @@ def main():
     if len(weeks) < 2 or weeks[1] != state['last_week']:
         raise ValueError('More than one week changed or columns were reordered; manual review needed')
     data, next_state = calculate(rows, current, weeks, state)
+    data['previousWar'] = {'weeks': old['weeks'], 'weekEndDates': old['weekEndDates'],
+                           'players': [{key: p[key] for key in ('tag', 'ratedWeeks', 'history')} for p in old['players']]}
     for key in ('liveWar', 'rosterAsOf'):
         if key in old:
             data[key] = old[key]

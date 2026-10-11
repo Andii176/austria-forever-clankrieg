@@ -4,6 +4,42 @@ const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 const joinDescription=p=>p.joinKind==='date'&&p.joinDate?(p.joinSource==='observed'?'Beitritt erkannt: ':'Eintritt: ')+p.joinDate.split('-').reverse().join('.'):p.joinKind==='longstanding'?'Länger als 10 Wochen dabei':'Eintritt unbekannt';
 const clanAPI=String(window.CLAN_API??'').replace(/\/$/,'');
 let data,openTag=null;
+const ratingWeights=[1,1,1,.9,.8,.7,.6,.5,.4,.3];
+function previousRating(p){
+ const snapshot=data.previousWar;
+ if(!snapshot||snapshot.weeks?.[0]!==data.weeks?.[1]||p.points===null)return null;
+ const previous=snapshot.players.find(old=>old.tag===p.tag);
+ // New members without a recorded previous stay have no comparable prior rating.
+ if(!previous)return null;
+ let count;
+ if(p.joinKind==='date'&&!p.membershipNote){
+  count=previous.history.filter(h=>p.joinDate<snapshot.weekEndDates[h.week]).length;
+ }else if(p.joinKind==='longstanding'){
+  count=previous.history.length;
+ }else{
+  count=Math.max(0,p.ratedWeeks-1);
+  // A full rolling window may already have contained ten rated weeks last week.
+  if(p.ratedWeeks===10&&previous.ratedWeeks>=10)count=10;
+ }
+ if(!count)return null;
+ const rated=previous.history.slice(0,count);
+ const denom=rated.reduce((sum,h,i)=>sum+ratingWeights[i],0);
+ return {
+  points:Math.round(rated.reduce((sum,h,i)=>sum+h.points*ratingWeights[i],0)/denom),
+  participation:Math.round(1000*rated.reduce((sum,h,i)=>sum+h.decks*ratingWeights[i],0)/(16*denom))/10,
+ };
+}
+function ratingDelta(p,metric){
+ const previous=previousRating(p);
+ if(!previous)return '<small class="rating-delta muted">Noch kein Vorwochenwert</small>';
+ const value=metric==='points'?p.points-previous.points:Math.round((p.participation-previous.participation)*10)/10;
+ const sign=value>0?'+':value<0?'−':'±';
+ const arrow=value>0?'↑':value<0?'↓':'→';
+ const number=Math.abs(value).toLocaleString('de-AT',{maximumFractionDigits:metric==='points'?0:1});
+ const unit=metric==='points'?'P.':'%-Pkt.';
+ const week=data.previousWar.weeks[0].replace('s_','Saison ').replace('-',' · CW ');
+ return `<small class="rating-delta ${value>0?'positive':value<0?'negative':'muted'}" title="Vorwochenwertung: ${escapeHTML(week)} · ${previous[metric].toLocaleString('de-AT')} ${metric==='points'?'Punkte':'%'}">${arrow} ${sign}${number} ${unit} zur Vorwoche</small>`;
+}
 function render(){
  const q=document.querySelector('#search').value.trim().toLocaleLowerCase('de');
  const sort=document.querySelector('#sort').value;
@@ -14,7 +50,7 @@ function render(){
  const body=document.querySelector('#rows');
  body.innerHTML=items.map(p=>{
   const expanded=openTag===p.tag;
-  const main=`<tr class="player" data-tag="${escapeHTML(p.tag)}" tabindex="0" role="button" aria-label="${escapeHTML(p.name)}: Wochenverlauf ${expanded?'schließen':'öffnen'}" aria-expanded="${expanded}"><td>${p.rank??'–'}</td><td><span class="player-name">${escapeHTML(p.name)}</span><span class="tag">${escapeHTML(p.tag)} · ${p.ratedWeeks} CW<span class="join-meta">${escapeHTML(joinDescription(p))}</span></span>${p.previousNames?.length?`<span class="membership-note">Früher: ${p.previousNames.map(escapeHTML).join(' → ')}</span>`:''}</td><td class="numeric" data-label="Gew. Punkte/CW"><strong>${p.points===null?'–':fmt.format(p.points)}</strong></td><td class="numeric" data-label="Gew. Teilnahme">${p.participation===null?'–':p.participation.toLocaleString('de-AT',{timeZone:'Europe/Vienna'})+' %'}</td><td class="numeric" data-label="Bis zu 3 letzte CW">${p.lastThree}/${p.lastThreePossible??48}</td><td class="numeric" data-label="Letzter CW">${p.lastDecks}/16</td><td><span class="pill ${p.category.toLocaleLowerCase('de').replace(' ','-')}">${escapeHTML(p.category)}</span></td></tr>`;
+  const main=`<tr class="player" data-tag="${escapeHTML(p.tag)}" tabindex="0" role="button" aria-label="${escapeHTML(p.name)}: Wochenverlauf ${expanded?'schließen':'öffnen'}" aria-expanded="${expanded}"><td>${p.rank??'–'}</td><td><span class="player-name">${escapeHTML(p.name)}</span><span class="tag">${escapeHTML(p.tag)} · ${p.ratedWeeks} CW<span class="join-meta">${escapeHTML(joinDescription(p))}</span></span>${p.previousNames?.length?`<span class="membership-note">Früher: ${p.previousNames.map(escapeHTML).join(' → ')}</span>`:''}</td><td class="numeric" data-label="Gew. Punkte/CW"><strong>${p.points===null?'–':fmt.format(p.points)}</strong>${ratingDelta(p,'points')}</td><td class="numeric" data-label="Gew. Teilnahme">${p.participation===null?'–':p.participation.toLocaleString('de-AT',{timeZone:'Europe/Vienna'})+' %'}${ratingDelta(p,'participation')}</td><td class="numeric" data-label="Bis zu 3 letzte CW">${p.lastThree}/${p.lastThreePossible??48}</td><td class="numeric" data-label="Letzter CW">${p.lastDecks}/16</td><td><span class="pill ${p.category.toLocaleLowerCase('de').replace(' ','-')}">${escapeHTML(p.category)}</span></td></tr>`;
   const detail=expanded?`<tr class="detail"><td colspan="7"><div class="detail-title">${escapeHTML(joinDescription(p))}${p.membershipNote?` · ${escapeHTML(p.membershipNote)}`:''}<br>${p.ratedWeeks} gewertete CW · ${p.ratingStart?'Beginn: '+escapeHTML(p.ratingStart.replace('s_','Saison ').replace('-',' · CW '))+(p.joinEstimated?' (geschätzt)':''):'Noch keine Teilnahme'} · neueste Woche zuerst</div><div class="week-grid">${p.history.slice(0,p.ratedWeeks).map((h,i)=>`<div class="week ${i>=p.ratedWeeks?'excluded':''}"><b>${escapeHTML(h.week.replace('s_','Saison ').replace('-',' · CW '))}</b><strong>${fmt.format(h.points)} P.</strong><small>${h.decks}/16 Decks · ${i>=p.ratedWeeks?'Nicht gewertet':Math.round(h.weight*100)+' % Gewicht'}</small></div>`).join('')}</div></td></tr>`:'';
   return main+detail;
  }).join('');
@@ -63,7 +99,7 @@ function renderReview(){
    if(g.key==='kick')return kickWeeks(a).reduce((sum,h)=>sum+h.points,0)-kickWeeks(b).reduce((sum,h)=>sum+h.points,0)||a.name.localeCompare(b.name,'de');
    return recentReview(a).decks/recentReview(a).possible-recentReview(b).decks/recentReview(b).possible||(a.points??Infinity)-(b.points??Infinity)||a.name.localeCompare(b.name,'de');
   });
-  return `<section class="review-group ${g.key}" aria-labelledby="${g.key}-title"><div class="review-heading"><h3 id="${g.key}-title">${g.title} <span>${players.length}</span></h3><p>${g.note}</p></div>${players.length?`<div class="review-cards">${players.map(p=>`<article class="review-card"><details class="review-player-details"><summary class="review-player"><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)} · ${p.ratedWeeks} CW gewertet</span><span class="history-toggle">Wochenverlauf öffnen / schließen</span></summary><div class="review-history"><p class="detail-title">${escapeHTML(joinDescription(p))} · neueste gewertete Woche zuerst</p>${memberNote(p)}${p.ratedWeeks?`<div class="week-grid">${p.history.slice(0,p.ratedWeeks).map(h=>`<div class="week ${g.key==='kick'&&kickWeeks(p).some(k=>k.week===h.week)?'low-week':''}"><b>${escapeHTML(h.week.replace('s_','Saison ').replace('-',' · CW '))}</b><strong>${fmt.format(h.points)} P.</strong><small>${h.decks}/16 Decks · ${Math.round(h.weight*100)} % Gewicht</small></div>`).join('')}</div>`:'<p class="hint">Noch kein gewerteter Clankrieg.</p>'}</div></details><p class="review-reason">${escapeHTML(reviewReason(p,g.key))}</p><dl><div><dt>Gew. Punkte/CW</dt><dd>${p.points===null?'–':fmt.format(p.points)}</dd></div><div><dt>Bis zu 3 letzte CW</dt><dd>${recentReview(p).decks}/${recentReview(p).possible} Decks</dd></div><div><dt>Letzter CW</dt><dd>${p.lastDecks}/16 Decks</dd></div></dl></article>`).join('')}</div>`:'<p class="hint">Aktuell keine Spieler in dieser Gruppe.</p>'}</section>`;
+  return `<section class="review-group ${g.key}" aria-labelledby="${g.key}-title"><div class="review-heading"><h3 id="${g.key}-title">${g.title} <span>${players.length}</span></h3><p>${g.note}</p></div>${players.length?`<div class="review-cards">${players.map(p=>`<article class="review-card"><details class="review-player-details"><summary class="review-player"><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)} · ${p.ratedWeeks} CW gewertet</span><span class="history-toggle">Wochenverlauf öffnen / schließen</span></summary><div class="review-history"><p class="detail-title">${escapeHTML(joinDescription(p))} · neueste gewertete Woche zuerst</p>${memberNote(p)}${p.ratedWeeks?`<div class="week-grid">${p.history.slice(0,p.ratedWeeks).map(h=>`<div class="week ${g.key==='kick'&&kickWeeks(p).some(k=>k.week===h.week)?'low-week':''}"><b>${escapeHTML(h.week.replace('s_','Saison ').replace('-',' · CW '))}</b><strong>${fmt.format(h.points)} P.</strong><small>${h.decks}/16 Decks · ${Math.round(h.weight*100)} % Gewicht</small></div>`).join('')}</div>`:'<p class="hint">Noch kein gewerteter Clankrieg.</p>'}</div></details><p class="review-reason">${escapeHTML(reviewReason(p,g.key))}</p><dl><div><dt>Gew. Punkte/CW</dt><dd>${p.points===null?'–':fmt.format(p.points)}${ratingDelta(p,'points')}</dd></div><div><dt>Gew. Teilnahme</dt><dd>${p.participation===null?'–':p.participation.toLocaleString('de-AT')+' %'}${ratingDelta(p,'participation')}</dd></div><div><dt>Bis zu 3 letzte CW</dt><dd>${recentReview(p).decks}/${recentReview(p).possible} Decks</dd></div><div><dt>Letzter CW</dt><dd>${p.lastDecks}/16 Decks</dd></div></dl></article>`).join('')}</div>`:'<p class="hint">Aktuell keine Spieler in dieser Gruppe.</p>'}</section>`;
  }).join('');
 }
 function setView(review){
@@ -76,7 +112,12 @@ function setView(review){
 
 async function start(){
  const response=await fetch(clanAPI?clanAPI+'/api/data':'data.json',{cache:'no-store'});if(!response.ok)throw new Error('Daten nicht verfügbar');data=await response.json();
- document.querySelector('#as-of').textContent=`Stand ${data.asOf}`;
+ const completedDate=data.weekEndDates?.[data.weeks[0]];
+ document.querySelector('#as-of').textContent='CW-Ranking bis '+(completedDate?completedDate.split('-').reverse().join('.'):data.asOf);
+ const timestamps=[data.rosterAsOf,data.liveWar?.checkedAt,...(data.membershipRecords??[]).map(r=>r.updatedAt)].filter(t=>t&&Number.isFinite(Date.parse(t)));
+ const updated=document.querySelector('#updated-at');
+ if(timestamps.length){updated.hidden=false;updated.textContent='Zuletzt aktualisiert: '+new Date(Math.max(...timestamps.map(Date.parse))).toLocaleString('de-AT',{timeZone:'Europe/Vienna'});}
+
  const rosterNote=document.querySelector('#roster-as-of');if(data.rosterAsOf){rosterNote.hidden=false;rosterNote.textContent='Mitglieder geprüft: '+new Date(data.rosterAsOf).toLocaleString('de-AT',{timeZone:'Europe/Vienna'});}
  if(data.liveWar){const w=data.liveWar;document.querySelector('#live-war').hidden=false;document.querySelector('#live-title').textContent=w.week.replace('s_','Saison ').replace('-',' · CW ')+' · '+w.status;document.querySelector('#live-summary').textContent=fmt.format(w.points)+' Punkte · '+fmt.format(w.decks)+' gespielte Decks';document.querySelector('#live-updated').textContent='Abgerufen: '+new Date(w.checkedAt).toLocaleString('de-AT',{timeZone:'Europe/Vienna'});document.querySelector('#live-players').innerHTML=w.players.map(p=>`<tr><td><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)}${p.currentMember?'':' · inzwischen ausgeschieden'}</span></td><td>${fmt.format(p.points)}</td><td>${fmt.format(p.decks)}</td></tr>`).join('');}
  const [now,previous]=data.trend;

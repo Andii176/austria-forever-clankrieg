@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Poll the current roster hourly; record only newly observed members."""
+"""Poll the current roster four times daily; record only newly observed members."""
 import json
 import os
 from datetime import datetime
@@ -69,8 +69,9 @@ def current_snapshot(old, state, tracker, api_rows, roster, observed_at):
     # Retain all tracked starts across absences, including members without a manual record.
     for tag, member in state['members'].items():
         next_state['members'].setdefault(tag, member)
-    for key in ('asOf', 'source', 'trend'):
-        result[key] = old[key]
+    for key in ('asOf', 'source', 'trend', 'previousWar'):
+        if key in old:
+            result[key] = old[key]
     if 'liveWar' in old:
         result['liveWar'] = old['liveWar']
     result['rosterAsOf'] = observed_at
