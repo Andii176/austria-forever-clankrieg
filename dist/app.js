@@ -29,9 +29,17 @@ function recentReview(p){
  const weeks=Math.min(3,p.ratedWeeks);
  return {decks:p.history.slice(0,weeks).reduce((sum,h)=>sum+h.decks,0),possible:weeks*16};
 }
+function kickWeeks(p){
+ if(p.ratedWeeks<2)return [];
+ const weeks=data.weeks.slice(0,2);
+ const history=p.history.slice(0,p.ratedWeeks);
+ const latest=weeks.map(week=>history.find(h=>h.week===week));
+ return latest.length===2&&latest.every(h=>h&&Number.isFinite(h.points)&&h.points<1600)?latest:[];
+}
 function reviewStatus(p){
  const recent=recentReview(p);
  if(p.ratedWeeks<1||p.points===null)return 'new';
+ if(kickWeeks(p).length===2)return 'kick';
  if(p.points<1200&&recent.decks/recent.possible<2/3)return 'risk';
  if(p.points<1800||p.lastDecks<12)return 'watch';
  return 'ok';
@@ -39,6 +47,7 @@ function reviewStatus(p){
 function reviewReason(p,status){
  const recent=recentReview(p);
  if(status==='new')return `Ersten abgeschlossenen CW abwarten`;
+ if(status==='kick')return 'Zwei abgeschlossene CW in Folge unter 1.600 Punkten: '+kickWeeks(p).map(h=>`${h.week.replace('s_','Saison ').replace('-',' · CW ')}: ${fmt.format(h.points)} P.`).join(' / ');
  const reasons=[];
  if(p.points<1200)reasons.push('Kritischer Langzeitwert');
  else if(p.points<1800)reasons.push('Schwacher Langzeitwert');
@@ -48,14 +57,14 @@ function reviewReason(p,status){
  return reasons.join(' · ');
 }
 function renderReview(){
- const groups=[{key:'risk',title:'Gefährdet',note:'Bei der nächsten Clanprüfung zuerst besprechen.'},{key:'watch',title:'Unter Beobachtung',note:'Verbesserung im nächsten CW prüfen.'},{key:'new',title:'Neu / noch offen',note:'Ein abgeschlossener CW zur Eingewöhnung.'}];
+ const groups=[{key:'kick',title:'Kick empfohlen · 2 CW unter 1.600 Punkten',note:'In den letzten zwei abgeschlossenen, gewerteten CW jeweils unter 1.600 Punkten. In der Regel ausschließen; Absprachen und entschuldigte Ausfälle vorher prüfen.'},{key:'risk',title:'Gefährdet',note:'Bei der nächsten Clanprüfung zuerst besprechen.'},{key:'watch',title:'Unter Beobachtung',note:'Verbesserung im nächsten CW prüfen.'},{key:'new',title:'Neu / noch offen',note:'Ein abgeschlossener CW zur Eingewöhnung.'}];
  document.querySelector('#review-groups').innerHTML=groups.map(g=>{
-  const players=data.players.filter(p=>reviewStatus(p)===g.key).sort((a,b)=>recentReview(a).decks/recentReview(a).possible-recentReview(b).decks/recentReview(b).possible||(a.points??Infinity)-(b.points??Infinity)||a.name.localeCompare(b.name,'de'));
-  return `<section class="review-group ${g.key}" aria-labelledby="${g.key}-title"><div class="review-heading"><h3 id="${g.key}-title">${g.title} <span>${players.length}</span></h3><p>${g.note}</p></div>${players.length?`<div class="review-cards">${players.map(p=>`<article class="review-card"><div class="review-player"><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)} · ${p.ratedWeeks} CW gewertet${p.joinEstimated?' · Wertungsbeginn geschätzt':''}</span>${memberNote(p)}</div><p class="review-reason">${escapeHTML(reviewReason(p,g.key))}</p><dl><div><dt>Gew. Punkte/CW</dt><dd>${p.points===null?'–':fmt.format(p.points)}</dd></div><div><dt>Bis zu 3 letzte CW</dt><dd>${recentReview(p).decks}/${recentReview(p).possible} Decks</dd></div><div><dt>Letzter CW</dt><dd>${p.lastDecks}/16 Decks</dd></div></dl><button type="button" class="show-player" data-tag="${escapeHTML(p.tag)}">Wochenverlauf ansehen</button></article>`).join('')}</div>`:'<p class="hint">Aktuell keine Spieler in dieser Gruppe.</p>'}</section>`;
+  const players=data.players.filter(p=>reviewStatus(p)===g.key).sort((a,b)=>{
+   if(g.key==='kick')return kickWeeks(a).reduce((sum,h)=>sum+h.points,0)-kickWeeks(b).reduce((sum,h)=>sum+h.points,0)||a.name.localeCompare(b.name,'de');
+   return recentReview(a).decks/recentReview(a).possible-recentReview(b).decks/recentReview(b).possible||(a.points??Infinity)-(b.points??Infinity)||a.name.localeCompare(b.name,'de');
+  });
+  return `<section class="review-group ${g.key}" aria-labelledby="${g.key}-title"><div class="review-heading"><h3 id="${g.key}-title">${g.title} <span>${players.length}</span></h3><p>${g.note}</p></div>${players.length?`<div class="review-cards">${players.map(p=>`<article class="review-card"><details class="review-player-details"><summary class="review-player"><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)} · ${p.ratedWeeks} CW gewertet</span><span class="history-toggle">Wochenverlauf öffnen / schließen</span></summary><div class="review-history"><p class="detail-title">${escapeHTML(joinDescription(p))} · neueste gewertete Woche zuerst</p>${memberNote(p)}${p.ratedWeeks?`<div class="week-grid">${p.history.slice(0,p.ratedWeeks).map(h=>`<div class="week ${g.key==='kick'&&kickWeeks(p).some(k=>k.week===h.week)?'low-week':''}"><b>${escapeHTML(h.week.replace('s_','Saison ').replace('-',' · CW '))}</b><strong>${fmt.format(h.points)} P.</strong><small>${h.decks}/16 Decks · ${Math.round(h.weight*100)} % Gewicht</small></div>`).join('')}</div>`:'<p class="hint">Noch kein gewerteter Clankrieg.</p>'}</div></details><p class="review-reason">${escapeHTML(reviewReason(p,g.key))}</p><dl><div><dt>Gew. Punkte/CW</dt><dd>${p.points===null?'–':fmt.format(p.points)}</dd></div><div><dt>Bis zu 3 letzte CW</dt><dd>${recentReview(p).decks}/${recentReview(p).possible} Decks</dd></div><div><dt>Letzter CW</dt><dd>${p.lastDecks}/16 Decks</dd></div></dl></article>`).join('')}</div>`:'<p class="hint">Aktuell keine Spieler in dieser Gruppe.</p>'}</section>`;
  }).join('');
- document.querySelectorAll('.show-player').forEach(button=>button.addEventListener('click',()=>{
-  document.querySelector('#search').value=button.dataset.tag;openTag=button.dataset.tag;setView(false);render();document.querySelector('#ranking-title').scrollIntoView({behavior:'smooth',block:'start'});document.querySelector('#rows .player')?.focus({preventScroll:true});
- }));
 }
 function setView(review){
  document.querySelector('#membership-panel').hidden=true;document.querySelector('#membership-view').setAttribute('aria-pressed','false');
