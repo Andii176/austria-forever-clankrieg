@@ -102,12 +102,12 @@ function renderReview(){
   return `<section class="review-group ${g.key}" aria-labelledby="${g.key}-title"><div class="review-heading"><h3 id="${g.key}-title">${g.title} <span>${players.length}</span></h3><p>${g.note}</p></div>${players.length?`<div class="review-cards">${players.map(p=>`<article class="review-card"><details class="review-player-details"><summary class="review-player"><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)} · ${p.ratedWeeks} CW gewertet</span><span class="history-toggle">Wochenverlauf öffnen / schließen</span></summary><div class="review-history"><p class="detail-title">${escapeHTML(joinDescription(p))} · neueste gewertete Woche zuerst</p>${memberNote(p)}${p.ratedWeeks?`<div class="week-grid">${p.history.slice(0,p.ratedWeeks).map(h=>`<div class="week ${g.key==='kick'&&kickWeeks(p).some(k=>k.week===h.week)?'low-week':''}"><b>${escapeHTML(h.week.replace('s_','Saison ').replace('-',' · CW '))}</b><strong>${fmt.format(h.points)} P.</strong><small>${h.decks}/16 Decks · ${Math.round(h.weight*100)} % Gewicht</small></div>`).join('')}</div>`:'<p class="hint">Noch kein gewerteter Clankrieg.</p>'}</div></details><p class="review-reason">${escapeHTML(reviewReason(p,g.key))}</p><dl><div><dt>Gew. Punkte/CW</dt><dd>${p.points===null?'–':fmt.format(p.points)}${ratingDelta(p,'points')}</dd></div><div><dt>Gew. Teilnahme</dt><dd>${p.participation===null?'–':p.participation.toLocaleString('de-AT')+' %'}${ratingDelta(p,'participation')}</dd></div><div><dt>Bis zu 3 letzte CW</dt><dd>${recentReview(p).decks}/${recentReview(p).possible} Decks</dd></div><div><dt>Letzter CW</dt><dd>${p.lastDecks}/16 Decks</dd></div></dl></article>`).join('')}</div>`:'<p class="hint">Aktuell keine Spieler in dieser Gruppe.</p>'}</section>`;
  }).join('');
 }
-function setView(review){
- document.querySelector('#membership-panel').hidden=true;document.querySelector('#membership-view').setAttribute('aria-pressed','false');
- document.querySelector('#statistics-view').hidden=review;
- document.querySelector('#review-panel').hidden=!review;
- document.querySelector('#overview-view').setAttribute('aria-pressed',String(!review));
- document.querySelector('#review-view').setAttribute('aria-pressed',String(review));
+function setView(view){
+ const views={clan:['statistics-view','overview-view'],members:['members-panel','members-view'],review:['review-panel','review-view'],membership:['membership-panel','membership-view']};
+ for(const [key,[panel,button]] of Object.entries(views)){
+  document.querySelector('#'+panel).hidden=key!==view;
+  document.querySelector('#'+button).setAttribute('aria-pressed',String(key===view));
+ }
 }
 
 async function start(){
@@ -129,7 +129,7 @@ async function start(){
  const maxPoints=Math.max(...data.trend.map(w=>w.points)),maxDecks=Math.max(...data.trend.map(w=>w.decks));
  const change=(value,prior)=>{if(!prior)return '<span class="muted">–</span>';const pct=(value/prior-1)*100;return `<span class="${pct>=0?'positive':'negative'}">${pct>=0?'+':''}${pct.toLocaleString('de-AT',{maximumFractionDigits:1})} %</span>`};
  document.querySelector('#week-rows').innerHTML=data.trend.map((w,i)=>{const prior=data.trend[i+1];return `<div class="result-row ${i===0?'latest':''}" role="row"><div class="week-cell" role="cell"><strong>${escapeHTML(w.week.replace('s_','Saison ').replace('-',' · CW '))}</strong>${i===0?'<small>Aktuellster CW</small>':''}</div><div class="measure" role="cell"><strong>${fmt.format(w.points)}</strong><div class="track"><span class="points-fill" style="width:${(w.points/maxPoints*100).toFixed(1)}%"></span></div></div><div class="measure" role="cell"><strong>${fmt.format(w.decks)}</strong><div class="track"><span class="decks-fill" style="width:${(w.decks/maxDecks*100).toFixed(1)}%"></span></div></div><div class="change-cell" role="cell"><span>Punkte ${prior?change(w.points,prior.points):'–'}</span><span>Decks ${prior?change(w.decks,prior.decks):'–'}</span></div></div>`}).join('');
- setupMembership();renderReview();document.querySelector('#overview-view').addEventListener('click',()=>setView(false));document.querySelector('#review-view').addEventListener('click',()=>setView(true));
+ setupMembership();renderReview();document.querySelector('#overview-view').addEventListener('click',()=>setView('clan'));document.querySelector('#members-view').addEventListener('click',()=>setView('members'));document.querySelector('#review-view').addEventListener('click',()=>setView('review'));
  document.querySelector('#search').addEventListener('input',render);document.querySelector('#sort').addEventListener('change',render);render();
 }
 start().catch(()=>{document.querySelector('#rows').innerHTML='<tr><td colspan="7">Die Statistik konnte gerade nicht geladen werden.</td></tr>'});
@@ -143,7 +143,7 @@ function setupMembership(){
  const populate=()=>{const p=players.find(p=>p.tag===select.value);tag.value=p?.tag??'';kind.value=p?.joinKind==='longstanding'?'longstanding':p?.joinKind==='date'?'date':'unknown';dateInput.value=p?.joinDate??'';document.querySelector('#join-current').textContent=p?`Gespeichert: ${joinDescription(p)}. Eine neue Angabe überschreibt diesen Wert.`:'Neuen Spieler mit eindeutigem Spielertag eintragen.';document.querySelector('#join-exception').hidden=!p?.membershipNote;document.querySelector('#join-feedback').textContent='';document.querySelector('#join-history').textContent=(p?.changes??[]).slice().reverse().map(h=>`${new Date(h.changedAt).toLocaleString('de-AT',{timeZone:'Europe/Vienna'})} · vorher: ${h.kind==='date'?h.date:h.kind==='longstanding'?'länger als 10 Wochen':h.kind==='unknown'?'unbekannt':'Vorbelegung'}`).join(' | ');mode();};
  select.addEventListener('change',populate);kind.addEventListener('change',mode);
  tag.addEventListener('input',()=>{const p=players.find(p=>p.tag===tag.value.trim().toUpperCase());if(p){select.value=p.tag;populate();}else{select.value='';document.querySelector('#join-exception').hidden=true;}});
- document.querySelector('#membership-view').addEventListener('click',()=>{document.querySelector('#statistics-view').hidden=true;document.querySelector('#review-panel').hidden=true;document.querySelector('#membership-panel').hidden=false;for(const id of ['overview-view','review-view'])document.querySelector('#'+id).setAttribute('aria-pressed','false');document.querySelector('#membership-view').setAttribute('aria-pressed','true');});
+ document.querySelector('#membership-view').addEventListener('click',()=>setView('membership'));
  document.querySelector('#membership-list').innerHTML=players.map(p=>`<div class="membership-row"><div><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)} · ${escapeHTML(joinDescription(p))}</span>${memberNote(p)}</div><button type="button" data-edit="${escapeHTML(p.tag)}">Bearbeiten</button></div>`).join('');
  document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>{select.value=b.dataset.edit;populate();document.querySelector('#membership-form').scrollIntoView({behavior:'smooth'});}));
  document.querySelector('#membership-form').addEventListener('submit',async e=>{
