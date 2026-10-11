@@ -57,7 +57,7 @@ function awardOrder(players,metric){
 function awardChanges(p,metric,previous,previousRank,currentRank){
  if(!previous||!previousRank)return '<span class="award-rank muted">Neu in der Wertung</span>';
  const rank=previousRank-currentRank;
- const rankText=rank>0?'↑ '+rank+' Plätze':rank<0?'↓ '+Math.abs(rank)+' Plätze':'→ Rang unverändert';
+ const rankText=rank>0?'↑ '+rank+(rank===1?' Platz':' Plätze'):rank<0?'↓ '+Math.abs(rank)+(rank===-1?' Platz':' Plätze'):'→ Rang unverändert';
  const value=p[metric]-previous[metric];
  const decimals=metric==='points'?0:1;
  const rounded=Math.round(value*10**decimals)/10**decimals;
