@@ -33,7 +33,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Eintrittslogik prüfen
-        run: python3 -m unittest -v test_membership.py
+        run: python3 -m unittest -v test_membership.py test_awards.py
       - name: Offizielle Clash-Royale-Daten auswerten
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         env:

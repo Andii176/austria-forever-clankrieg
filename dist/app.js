@@ -51,15 +51,39 @@ function pointsPerGame(p){
  const decks=rated.reduce((sum,h,i)=>sum+h.decks*(h.weight??ratingWeights[i]),0);
  return decks>0?points/decks:null;
 }
+function awardOrder(players,metric){
+ return players.filter(p=>p.ratedWeeks>0&&p[metric]!==null&&Number.isFinite(p[metric])).slice().sort((a,b)=>b[metric]-a[metric]||(b.points??0)-(a.points??0)||a.name.localeCompare(b.name,'de')||a.tag.localeCompare(b.tag));
+}
+function awardChanges(p,metric,previous,previousRank,currentRank){
+ if(!previous||!previousRank)return '<span class="award-rank muted">Neu in der Wertung</span>';
+ const rank=previousRank-currentRank;
+ const rankText=rank>0?'↑ '+rank+' Plätze':rank<0?'↓ '+Math.abs(rank)+' Plätze':'→ Rang unverändert';
+ const value=p[metric]-previous[metric];
+ const decimals=metric==='points'?0:1;
+ const rounded=Math.round(value*10**decimals)/10**decimals;
+ const number=Math.abs(rounded).toLocaleString('de-AT',{maximumFractionDigits:decimals});
+ const unit=metric==='participation'?'%-Pkt.':'P.';
+ const difference=(rounded>0?'↑ +':rounded<0?'↓ −':'→ ±')+number+' '+unit;
+ return `<span class="award-rank ${rank>0?'positive':rank<0?'negative':'muted'}" title="Vorwoche: Platz ${previousRank}">${rankText}</span><span class="award-delta ${rounded>0?'positive':rounded<0?'negative':'muted'}" title="Wertänderung zur Vorwoche">${difference}</span>`;
+}
 function renderPodiums(){
+ const snapshot=data.awards;
+ const players=snapshot?.players??data.players.map(p=>({...p,pointsPerGame:pointsPerGame(p)}));
+ const prior=snapshot?.previous;
+ const currentNames=new Map(data.players.map(p=>[p.tag,p]));
  const groups=[
-  {key:'overall',title:'Gesamtwertung',caption:'Gew. Punkte/CW',value:p=>p.points,format:v=>fmt.format(v)+' P.'},
-  {key:'attendance',title:'Teilnahmequote',caption:'Gew. Teilnahme',value:p=>p.participation,format:v=>v.toLocaleString('de-AT',{maximumFractionDigits:1})+' %'},
-  {key:'efficiency',title:'Punkte pro Spiel',caption:'Gew. Punkte / gespieltem Deck',value:pointsPerGame,format:v=>v.toLocaleString('de-AT',{maximumFractionDigits:1})+' P.'},
+  {key:'overall',title:'Gesamtwertung',caption:'Gew. Punkte/CW',metric:'points',format:v=>fmt.format(v)+' P.'},
+  {key:'attendance',title:'Teilnahmequote',caption:'Gew. Teilnahme',metric:'participation',format:v=>v.toLocaleString('de-AT',{maximumFractionDigits:1})+' %'},
+  {key:'efficiency',title:'Punkte pro Spiel',caption:'Gew. Punkte / gespieltem Deck',metric:'pointsPerGame',format:v=>v.toLocaleString('de-AT',{maximumFractionDigits:1})+' P.'},
  ];
+ const week=(snapshot?.week??data.weeks[0]).replace('s_','Saison ').replace('-',' · CW ');
+ document.querySelector('#awards-week').textContent=week+' · Wochenwertung';
  document.querySelector('#podium-groups').innerHTML=groups.map(g=>{
-  const players=data.players.map(p=>({p,value:g.value(p)})).filter(x=>x.p.ratedWeeks>0&&x.value!==null&&Number.isFinite(x.value)).sort((a,b)=>b.value-a.value||(b.p.points??0)-(a.p.points??0)||a.p.name.localeCompare(b.p.name,'de')||a.p.tag.localeCompare(b.p.tag)).slice(0,5);
-  return `<article class="podium-category" aria-labelledby="podium-${g.key}"><div class="podium-heading"><span class="podium-trophy" aria-hidden="true">🏆</span><h3 id="podium-${g.key}">${g.title}</h3><p>${g.caption}</p></div>${players.length?`<ol class="podium-list">${players.map(({p,value},i)=>`<li class="podium-place place-${i+1}"><span class="podium-medal" aria-hidden="true">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</span><span class="sr-only">Platz ${i+1}: </span><strong class="podium-name">${escapeHTML(p.name)}${roleBadge(p)}</strong><span class="podium-value">${g.format(value)}</span><small>${p.ratedWeeks} CW gewertet</small></li>`).join('')}</ol>`:'<p class="hint">Noch keine gewerteten Spieler.</p>'}</article>`;
+  const ranked=awardOrder(players,g.metric).slice(0,10);
+  const previous=awardOrder(prior?.players??[],g.metric);
+  const previousRanks=new Map(previous.map((p,i)=>[p.tag,i+1]));
+  const previousPlayers=new Map(previous.map(p=>[p.tag,p]));
+  return `<article class="podium-category" aria-labelledby="podium-${g.key}"><div class="podium-heading"><span class="podium-trophy" aria-hidden="true">🏆</span><h3 id="podium-${g.key}">${g.title}</h3><p>${g.caption}</p></div>${ranked.length?`<ol class="podium-list">${ranked.map((p,i)=>{const identity=currentNames.get(p.tag)??p;return `<li class="podium-place place-${i+1} ${i>=3?'podium-runner':''}"><span class="podium-medal" aria-hidden="true">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</span><span class="sr-only">Platz ${i+1}: </span><strong class="podium-name">${escapeHTML(identity.name)}${roleBadge(identity)}</strong><span class="podium-value">${g.format(p[g.metric])}</span><small>${p.ratedWeeks} CW gewertet</small><div class="award-changes">${prior?awardChanges(p,g.metric,previousPlayers.get(p.tag),previousRanks.get(p.tag),i+1):'<span class="muted">Noch kein Vorwochenvergleich</span>'}</div></li>`;}).join('')}</ol>`:'<p class="hint">Noch keine gewerteten Spieler.</p>'}</article>`;
  }).join('');
 }
 

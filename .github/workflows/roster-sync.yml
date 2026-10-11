@@ -8,6 +8,8 @@ on:
     branches: [main]
     paths:
       - roster_sync.py
+      - awards.py
+      - test_awards.py
       - test_roster_sync.py
       - .github/workflows/roster-sync.yml
 permissions:
@@ -63,7 +65,7 @@ jobs:
           python-version: '3.12'
       - if: steps.priority.outputs.run_roster == 'true'
         name: Neueintritte und Wiedereintritte prüfen
-        run: python3 -m unittest -v test_roster_sync.py
+        run: python3 -m unittest -v test_roster_sync.py test_awards.py
       - if: steps.priority.outputs.run_roster == 'true'
         name: Aktuellen Mitgliederstand abrufen
         env:

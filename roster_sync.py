@@ -69,7 +69,7 @@ def current_snapshot(old, state, tracker, api_rows, roster, observed_at):
     # Retain all tracked starts across absences, including members without a manual record.
     for tag, member in state['members'].items():
         next_state['members'].setdefault(tag, member)
-    for key in ('asOf', 'source', 'trend', 'previousWar'):
+    for key in ('asOf', 'source', 'trend', 'previousWar', 'awards'):
         if key in old:
             result[key] = old[key]
     if 'liveWar' in old:
@@ -105,6 +105,9 @@ def main():
             # A concurrent manual edit takes priority. Never overwrite it automatically.
             print('Eintritt wurde zwischenzeitlich bearbeitet; manuelle Angabe bleibt erhalten')
     result, next_state = current_snapshot(old, state, next_tracker, api_rows, roster, observed_at)
+    if not result.get('awards'):
+        from awards import freeze_awards
+        result['awards'] = freeze_awards(result, records)
     for path, value in ((DATA, result), (STATE, next_state), (TRACKER, next_tracker)):
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2 if path != DATA else None)+'\n')
     print(f'Mitglieder geprüft: {len(roster)}; neue Eintrittsangaben: {len(additions)}; {observed_at}')

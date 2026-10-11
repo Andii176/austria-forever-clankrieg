@@ -203,6 +203,12 @@ def main():
     data, next_state = calculate(rows, current, weeks, state)
     data['previousWar'] = {'weeks': old['weeks'], 'weekEndDates': old['weekEndDates'],
                            'players': [{key: p[key] for key in ('tag', 'ratedWeeks', 'history')} for p in old['players']]}
+    from awards import freeze_awards
+    request = Request('https://austria-forever-memberships.andreas-99f.workers.dev/api/data',
+                      headers={'Origin': 'https://andii176.github.io', 'User-Agent': 'Austria-forever-awards/1.0'})
+    with urlopen(request, timeout=35) as response:
+        records = json.load(response)['membershipRecords']
+    data['awards'] = freeze_awards(data, records, old.get('awards'))
     for key in ('liveWar', 'rosterAsOf'):
         if key in old:
             data[key] = old[key]
