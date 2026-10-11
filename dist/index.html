@@ -7,7 +7,7 @@
   <meta name="description" content="Aktuelle Clankrieg-Statistik von Austria forever: zeitgewichtetes Ranking, Teilnahme und Wochenverlauf.">
   <title>Clankrieg · Austria forever</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=next-update-7">
+  <link rel="stylesheet" href="style.css?v=member-podium-8">
 </head>
 <body>
   <main class="shell">
@@ -33,6 +33,7 @@
 
     </div>
     <div id="members-panel" hidden>
+    <section class="honours" aria-label="Top 5 der Mitglieder"><div class="section-head"><div><span class="eyebrow">SIEGEREHRUNG</span><h2>Unsere Top 5</h2></div><span class="legend">Abgeschlossene, gewertete CW</span></div><div id="podium-groups" class="podium-groups"></div><p class="hint podium-note">Punkte pro Spiel = gewichtete Punkte geteilt durch gewichtete gespielte Decks. Nur die gewerteten Wochen zählen. Bei gleichem Wert entscheiden die gewichteten Punkte/CW, danach der Name.</p></section>
     <section class="panel ranking" aria-labelledby="ranking-title">
       <div class="section-head rank-head"><div><span class="eyebrow">MITGLIEDER</span><h2 id="ranking-title">Zeitgewichtetes Ranking <span id="member-count"></span></h2></div><div class="controls"><label class="search-wrap"><span class="sr-only">Spieler suchen</span><input id="search" type="search" placeholder="Spieler suchen…" autocomplete="off"></label><label class="sr-only" for="sort">Sortieren</label><select id="sort"><option value="rank">Nach Rang</option><option value="activity">Nach Teilnahme</option><option value="last">Nach letztem CW</option><option value="name">Nach Name</option></select></div></div>
       <div class="table-scroll"><table class="ranking-table"><thead><tr><th>Rang</th><th>Spieler</th><th class="numeric">Gew. Punkte/CW</th><th class="numeric">Gew. Teilnahme</th><th class="numeric">Bis zu 3 letzte CW</th><th class="numeric">Letzter CW</th><th>Leistung</th></tr></thead><tbody id="rows"></tbody></table></div>
@@ -69,7 +70,7 @@
 
     <footer>Austria forever · #QY2CRJUQ</footer>
   </main>
-  <script src="config.js?v=next-update-7"></script>
-  <script src="app.js?v=next-update-7" defer></script>
+  <script src="config.js?v=member-podium-8"></script>
+  <script src="app.js?v=member-podium-8" defer></script>
 </body>
 </html>

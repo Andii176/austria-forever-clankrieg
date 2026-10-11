@@ -40,6 +40,24 @@ function ratingDelta(p,metric){
  const week=data.previousWar.weeks[0].replace('s_','Saison ').replace('-',' · CW ');
  return `<small class="rating-delta ${value>0?'positive':value<0?'negative':'muted'}" title="Vorwochenwertung: ${escapeHTML(week)} · ${previous[metric].toLocaleString('de-AT')} ${metric==='points'?'Punkte':'%'}">${arrow} ${sign}${number} ${unit} zur Vorwoche</small>`;
 }
+function pointsPerGame(p){
+ const rated=p.history.slice(0,p.ratedWeeks);
+ const points=rated.reduce((sum,h,i)=>sum+h.points*(h.weight??ratingWeights[i]),0);
+ const decks=rated.reduce((sum,h,i)=>sum+h.decks*(h.weight??ratingWeights[i]),0);
+ return decks>0?points/decks:null;
+}
+function renderPodiums(){
+ const groups=[
+  {key:'overall',title:'Gesamtwertung',caption:'Gew. Punkte/CW',value:p=>p.points,format:v=>fmt.format(v)+' P.'},
+  {key:'attendance',title:'Teilnahmequote',caption:'Gew. Teilnahme',value:p=>p.participation,format:v=>v.toLocaleString('de-AT',{maximumFractionDigits:1})+' %'},
+  {key:'efficiency',title:'Punkte pro Spiel',caption:'Gew. Punkte / gespieltem Deck',value:pointsPerGame,format:v=>v.toLocaleString('de-AT',{maximumFractionDigits:1})+' P.'},
+ ];
+ document.querySelector('#podium-groups').innerHTML=groups.map(g=>{
+  const players=data.players.map(p=>({p,value:g.value(p)})).filter(x=>x.p.ratedWeeks>0&&x.value!==null&&Number.isFinite(x.value)).sort((a,b)=>b.value-a.value||(b.p.points??0)-(a.p.points??0)||a.p.name.localeCompare(b.p.name,'de')||a.p.tag.localeCompare(b.p.tag)).slice(0,5);
+  return `<article class="podium-category" aria-labelledby="podium-${g.key}"><div class="podium-heading"><span class="podium-trophy" aria-hidden="true">🏆</span><h3 id="podium-${g.key}">${g.title}</h3><p>${g.caption}</p></div>${players.length?`<ol class="podium-list">${players.map(({p,value},i)=>`<li class="podium-place place-${i+1}"><span class="podium-medal" aria-hidden="true">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</span><span class="sr-only">Platz ${i+1}: </span><strong class="podium-name">${escapeHTML(p.name)}</strong><span class="podium-value">${g.format(value)}</span><small>${p.ratedWeeks} CW gewertet</small></li>`).join('')}</ol>`:'<p class="hint">Noch keine gewerteten Spieler.</p>'}</article>`;
+ }).join('');
+}
+
 function render(){
  const q=document.querySelector('#search').value.trim().toLocaleLowerCase('de');
  const sort=document.querySelector('#sort').value;
@@ -142,7 +160,7 @@ async function start(){
  const maxPoints=Math.max(...data.trend.map(w=>w.points)),maxDecks=Math.max(...data.trend.map(w=>w.decks));
  const change=(value,prior)=>{if(!prior)return '<span class="muted">–</span>';const pct=(value/prior-1)*100;return `<span class="${pct>=0?'positive':'negative'}">${pct>=0?'+':''}${pct.toLocaleString('de-AT',{maximumFractionDigits:1})} %</span>`};
  document.querySelector('#week-rows').innerHTML=data.trend.map((w,i)=>{const prior=data.trend[i+1];return `<div class="result-row ${i===0?'latest':''}" role="row"><div class="week-cell" role="cell"><strong>${escapeHTML(w.week.replace('s_','Saison ').replace('-',' · CW '))}</strong>${i===0?'<small>Aktuellster CW</small>':''}</div><div class="measure" role="cell"><strong>${fmt.format(w.points)}</strong><div class="track"><span class="points-fill" style="width:${(w.points/maxPoints*100).toFixed(1)}%"></span></div></div><div class="measure" role="cell"><strong>${fmt.format(w.decks)}</strong><div class="track"><span class="decks-fill" style="width:${(w.decks/maxDecks*100).toFixed(1)}%"></span></div></div><div class="change-cell" role="cell"><span>Punkte ${prior?change(w.points,prior.points):'–'}</span><span>Decks ${prior?change(w.decks,prior.decks):'–'}</span></div></div>`}).join('');
- setupMembership();renderReview();document.querySelector('#overview-view').addEventListener('click',()=>setView('clan'));document.querySelector('#members-view').addEventListener('click',()=>setView('members'));document.querySelector('#review-view').addEventListener('click',()=>setView('review'));
+ setupMembership();renderReview();renderPodiums();document.querySelector('#overview-view').addEventListener('click',()=>setView('clan'));document.querySelector('#members-view').addEventListener('click',()=>setView('members'));document.querySelector('#review-view').addEventListener('click',()=>setView('review'));
  document.querySelector('#search').addEventListener('input',render);document.querySelector('#sort').addEventListener('change',render);render();
 }
 start().catch(()=>{document.querySelector('#rows').innerHTML='<tr><td colspan="7">Die Statistik konnte gerade nicht geladen werden.</td></tr>'});
