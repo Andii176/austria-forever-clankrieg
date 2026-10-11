@@ -110,7 +110,25 @@ function setView(view){
  }
 }
 
+function nextScheduledUpdate(now=new Date()){
+ const clock=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Vienna',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+ const first=Math.floor(now.getTime()/60000)*60000+60000;
+ for(let t=first;t<=first+26*60*60000;t+=60000){
+  const local=Object.fromEntries(clock.formatToParts(new Date(t)).map(p=>[p.type,p.value]));
+  const hour=Number(local.hour),minute=Number(local.minute),day=local.weekday;
+  const members=minute===37&&[0,6,13,19].includes(hour);
+  const war=hour===12&&((day==='Mon'&&[10,30,50].includes(minute))||(['Thu','Fri','Sat','Sun'].includes(day)&&minute===15));
+  if(war||members)return {date:new Date(t),label:war?'Clankrieg':'Mitglieder'};
+ }
+ return null;
+}
+function renderNextUpdate(){
+ const next=nextScheduledUpdate();
+ document.querySelector('#next-update').textContent=next?'Nächste Aktualisierung (geplant): '+next.date.toLocaleString('de-AT',{timeZone:'Europe/Vienna'})+' · '+next.label:'';
+}
+
 async function start(){
+ renderNextUpdate();setInterval(renderNextUpdate,60000);
  const response=await fetch(clanAPI?clanAPI+'/api/data':'data.json',{cache:'no-store'});if(!response.ok)throw new Error('Daten nicht verfügbar');data=await response.json();
  const timestamps=[data.rosterAsOf,data.liveWar?.checkedAt,...(data.membershipRecords??[]).map(r=>r.updatedAt)].filter(t=>t&&Number.isFinite(Date.parse(t)));
  const updated=document.querySelector('#updated-at');
