@@ -23,6 +23,7 @@ def snapshot(race, log, roster, checked_at):
     current={m['tag'] for m in roster['items']}
     players=[{'tag':p['tag'],'name':p['name'],'points':int(p.get('fame',0))+int(p.get('repairPoints',0)),
               'decks':int(p.get('decksUsed',0)), 'decksToday':int(p.get('decksUsedToday',0)),
+              'boatAttacks':int(p['boatAttacks']) if p.get('boatAttacks') is not None else None,
               'currentMember':p['tag'] in current} for p in clan.get('participants',[])]
     if any(p['points']<0 or p['decks']<0 for p in players):
         raise ValueError('Invalid live race values')
