@@ -1,6 +1,80 @@
 {
   "last_week": "s_136-4",
   "members": {
+    "202YUPQVCL": {
+      "new": true,
+      "since": "s_136-1",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "EulaVxaM",
+      "previous_names": [],
+      "role": "member"
+    },
+    "J9U029LVC": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Talha",
+      "previous_names": [],
+      "role": "member"
+    },
+    "22P09PRCV": {
+      "new": true,
+      "since": "s_135-5",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "m4di",
+      "previous_names": [],
+      "role": "member"
+    },
+    "URY0PGQ2Y": {
+      "new": true,
+      "since": null,
+      "first_seen": "s_136-4",
+      "estimated": true,
+      "previous_names": [],
+      "name": "tsch0sy",
+      "role": "member"
+    },
+    "2J08GVQ20": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "PrinceRaimi",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "PLQ9GC0R": {
+      "new": true,
+      "since": "s_136-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "ZapMyPekka",
+      "previous_names": [],
+      "role": "member"
+    },
+    "LPGPRPRL8": {
+      "new": true,
+      "since": "s_136-2",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "mourise",
+      "previous_names": [],
+      "role": "member"
+    },
+    "2R8JGP88": {
+      "new": true,
+      "since": "s_134-4",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "Malibu",
+      "previous_names": [],
+      "role": "member"
+    },
     "L2PQC088U": {
       "new": true,
       "since": "s_134-3",
@@ -40,52 +114,6 @@
       "name": "Goltoro",
       "previous_names": [],
       "role": "coLeader"
-    },
-    "2R8JGP88": {
-      "new": true,
-      "since": "s_134-4",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "Malibu",
-      "previous_names": [],
-      "role": "member"
-    },
-    "PLQ9GC0R": {
-      "new": true,
-      "since": "s_136-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "ZapMyPekka",
-      "previous_names": [],
-      "role": "member"
-    },
-    "LPGPRPRL8": {
-      "new": true,
-      "since": "s_136-2",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "mourise",
-      "previous_names": [],
-      "role": "member"
-    },
-    "2J08GVQ20": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "PrinceRaimi",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "22P09PRCV": {
-      "new": true,
-      "since": "s_135-5",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "m4di",
-      "previous_names": [],
-      "role": "member"
     },
     "P92CRCG2J": {
       "new": true,
@@ -136,24 +164,6 @@
       "previous_names": [],
       "role": "member"
     },
-    "202YUPQVCL": {
-      "new": true,
-      "since": "s_136-1",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "EulaVxaM",
-      "previous_names": [],
-      "role": "member"
-    },
-    "URY0PGQ2Y": {
-      "new": true,
-      "since": null,
-      "first_seen": "s_136-4",
-      "estimated": true,
-      "previous_names": [],
-      "name": "tsch0sy",
-      "role": "member"
-    },
     "JGJV9JCL": {
       "new": true,
       "since": "s_136-4",
@@ -197,16 +207,6 @@
       "first_seen": "s_136-3",
       "estimated": true,
       "name": "wolverine",
-      "previous_names": [],
-      "role": "member"
-    },
-    "J9U029LVC": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Talha",
       "previous_names": [],
       "role": "member"
     },
