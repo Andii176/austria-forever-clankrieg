@@ -169,9 +169,16 @@ function nextScheduledUpdate(now=new Date()){
  }
  return null;
 }
+function updateDateText(date){
+ const zone={timeZone:'Europe/Vienna'};
+ return date.toLocaleDateString('de-AT',{...zone,day:'2-digit',month:'2-digit',year:'numeric'})+' · '+date.toLocaleTimeString('de-AT',{...zone,hour:'2-digit',minute:'2-digit'});
+}
 function renderNextUpdate(){
  const next=nextScheduledUpdate();
- document.querySelector('#next-update').textContent=next?'Nächste Aktualisierung (geplant): '+next.date.toLocaleString('de-AT',{timeZone:'Europe/Vienna'})+' · '+next.label:'';
+ const element=document.querySelector('#next-update');
+ element.textContent=next?updateDateText(next.date):'Noch nicht geplant';
+ if(next)element.dateTime=next.date.toISOString();else element.removeAttribute('datetime');
+ document.querySelector('#next-update-type').textContent=next?next.label+' · geplant':'Kein Termin verfügbar';
 }
 
 async function start(){
@@ -179,9 +186,8 @@ async function start(){
  const response=await fetch(clanAPI?clanAPI+'/api/data':'data.json',{cache:'no-store'});if(!response.ok)throw new Error('Daten nicht verfügbar');data=await response.json();
  const timestamps=[data.rosterAsOf,data.liveWar?.checkedAt,...(data.membershipRecords??[]).map(r=>r.updatedAt)].filter(t=>t&&Number.isFinite(Date.parse(t)));
  const updated=document.querySelector('#updated-at');
- if(timestamps.length){updated.hidden=false;updated.textContent='Zuletzt aktualisiert: '+new Date(Math.max(...timestamps.map(Date.parse))).toLocaleString('de-AT',{timeZone:'Europe/Vienna'});}
+ if(timestamps.length){const date=new Date(Math.max(...timestamps.map(Date.parse)));updated.textContent=updateDateText(date);updated.dateTime=date.toISOString();}else{updated.textContent='Noch kein Datenstand';}
 
- const rosterNote=document.querySelector('#roster-as-of');if(data.rosterAsOf){rosterNote.hidden=false;rosterNote.textContent='Mitglieder geprüft: '+new Date(data.rosterAsOf).toLocaleString('de-AT',{timeZone:'Europe/Vienna'});}
  if(data.liveWar){const w=data.liveWar;document.querySelector('#live-war').hidden=false;document.querySelector('#live-title').textContent=w.week.replace('s_','Saison ').replace('-',' · CW ')+' · '+w.status;document.querySelector('#live-summary').textContent=fmt.format(w.points)+' Punkte · '+fmt.format(w.decks)+' gespielte Decks';document.querySelector('#live-updated').textContent='Abgerufen: '+new Date(w.checkedAt).toLocaleString('de-AT',{timeZone:'Europe/Vienna'});document.querySelector('#live-players').innerHTML=w.players.map(p=>`<tr><td><strong>${escapeHTML(p.name)}</strong><span class="tag">${escapeHTML(p.tag)}${p.currentMember?'':' · inzwischen ausgeschieden'}</span></td><td>${fmt.format(p.points)}</td><td>${fmt.format(p.decks)}</td></tr>`).join('');}
  document.querySelector('#member-count').textContent=`· ${data.players.length}`;
  const totalPoints=data.trend.reduce((n,w)=>n+w.points,0),totalDecks=data.trend.reduce((n,w)=>n+w.decks,0);
