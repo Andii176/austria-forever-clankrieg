@@ -1,148 +1,13 @@
 {
   "last_week": "s_137-2",
   "members": {
-    "JGJV9JCL": {
-      "new": true,
-      "since": "s_136-4",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "Ado47",
-      "previous_names": [],
-      "role": "member"
-    },
-    "8Y9ULRGY8": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Equick",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "PPRC0VCLG": {
-      "new": true,
-      "since": "s_135-5",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "slob",
-      "previous_names": [],
-      "role": "member"
-    },
-    "L2PQC088U": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "BP⚡️",
-      "previous_names": [],
-      "role": "member"
-    },
-    "PUCRRVUY9": {
-      "new": true,
-      "since": "s_136-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "lochnessi",
-      "previous_names": [],
-      "role": "member"
-    },
-    "2J08GVQ20": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "PrinceRaimi",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "2CPQQQ28U": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "simtac",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "PLQ9GC0R": {
-      "new": true,
-      "since": "s_136-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "ZapMyPekka",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "9JGVP90J": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Lurox",
-      "previous_names": [],
-      "role": "member"
-    },
-    "U208GY9Q0": {
-      "new": true,
-      "since": "s_135-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "King Me",
-      "previous_names": [],
-      "role": "member"
-    },
-    "P0RV9V9JQ": {
+    "J0GQYV2G": {
       "new": true,
       "since": "s_137-2",
       "first_seen": "s_137-1",
       "estimated": true,
       "previous_names": [],
-      "name": "Franky",
-      "role": "coLeader"
-    },
-    "P8GPU0U0": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "brusetta",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "8U2UPVJR": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "MonkeyD.Ruffy",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "PUV22QRR": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Da Bomba",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "GPGRCP0C9": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Vollpfosten",
-      "previous_names": [],
+      "name": "avery",
       "role": "member"
     },
     "2R8JGP88": {
@@ -154,23 +19,51 @@
       "previous_names": [],
       "role": "member"
     },
-    "2C2C9YLYG": {
+    "22P09PRCV": {
+      "new": true,
+      "since": "s_135-5",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "m4di",
+      "previous_names": [],
+      "role": "member"
+    },
+    "2C22JQL2": {
       "new": true,
       "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
       "join_kind": "longstanding",
-      "name": "Maxi",
+      "name": "AustrianEvil",
       "previous_names": [],
       "role": "elder"
     },
-    "CR2GQ2LJ8": {
+    "P8GPU0U0": {
       "new": true,
       "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
       "join_kind": "longstanding",
-      "name": "mosquitox",
+      "name": "brusetta",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "RQJRQU09G": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Goltoro",
+      "previous_names": [],
+      "role": "coLeader"
+    },
+    "PLQ9GC0R": {
+      "new": true,
+      "since": "s_136-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "ZapMyPekka",
       "previous_names": [],
       "role": "elder"
     },
@@ -183,6 +76,54 @@
       "previous_names": [],
       "role": "member"
     },
+    "UVJGVQ8VG": {
+      "new": true,
+      "since": null,
+      "first_seen": "s_137-2",
+      "estimated": true,
+      "previous_names": [],
+      "name": "Clasher",
+      "role": "member"
+    },
+    "VJYR0CCU2": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Andi176",
+      "previous_names": [],
+      "role": "leader"
+    },
+    "L2C2QYYJ": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "samsirapo",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "L2PQC088U": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "BP⚡️",
+      "previous_names": [],
+      "role": "member"
+    },
+    "LPGPRPRL8": {
+      "new": true,
+      "since": "s_136-2",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "mourise",
+      "previous_names": [],
+      "role": "elder"
+    },
     "P92CRCG2J": {
       "new": true,
       "since": "s_134-3",
@@ -193,51 +134,12 @@
       "previous_names": [],
       "role": "coLeader"
     },
-    "2C22JQL2": {
+    "8Y9G2CJJ": {
       "new": true,
-      "since": "s_134-3",
+      "since": "s_136-1",
       "first_seen": "s_136-3",
       "estimated": true,
-      "join_kind": "longstanding",
-      "name": "AustrianEvil",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "YYYLVYL29": {
-      "new": true,
-      "since": "s_136-2",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "-_-",
-      "previous_names": [],
-      "role": "member"
-    },
-    "J9U029LVC": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Talha",
-      "previous_names": [],
-      "role": "member"
-    },
-    "L2Y22829P": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "unNa",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "RVYG9R88L": {
-      "new": true,
-      "since": "s_135-1",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "Schokopudding",
+      "name": "DaneiBPM",
       "previous_names": [],
       "role": "member"
     },
@@ -251,62 +153,44 @@
       "previous_names": [],
       "role": "coLeader"
     },
-    "8Y9G2CJJ": {
-      "new": true,
-      "since": "s_136-1",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "DaneiBPM",
-      "previous_names": [],
-      "role": "member"
-    },
-    "22P09PRCV": {
-      "new": true,
-      "since": "s_135-5",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "m4di",
-      "previous_names": [],
-      "role": "member"
-    },
-    "VJVV8JLJQ": {
+    "J9U029LVC": {
       "new": true,
       "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
       "join_kind": "longstanding",
-      "name": "MysticKnight",
+      "name": "Talha",
       "previous_names": [],
       "role": "member"
     },
-    "C8PV9V8": {
+    "2J08GVQ20": {
       "new": true,
       "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
       "join_kind": "longstanding",
-      "name": "Buschy",
-      "previous_names": [],
-      "role": "member"
-    },
-    "L2C2QYYJ": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "samsirapo",
+      "name": "PrinceRaimi",
       "previous_names": [],
       "role": "elder"
     },
-    "CLYGY2Y00": {
+    "URY0PGQ2Y": {
       "new": true,
-      "since": "s_136-4",
+      "since": "s_137-1",
+      "first_seen": "s_136-4",
+      "estimated": true,
+      "previous_names": [],
+      "name": "tsch0sy",
+      "role": "member"
+    },
+    "2CPQQQ28U": {
+      "new": true,
+      "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
-      "name": "henoch",
+      "join_kind": "longstanding",
+      "name": "simtac",
       "previous_names": [],
-      "role": "member"
+      "role": "elder"
     },
     "202YUPQVCL": {
       "new": true,
@@ -317,54 +201,24 @@
       "previous_names": [],
       "role": "elder"
     },
-    "VJYR0CCU2": {
+    "8Y9ULRGY8": {
       "new": true,
       "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
       "join_kind": "longstanding",
-      "name": "Andi176",
+      "name": "Equick",
       "previous_names": [],
-      "role": "leader"
+      "role": "elder"
     },
-    "RJJUQYQVP": {
+    "J0V0UUYVG": {
       "new": true,
       "since": "s_136-3",
       "first_seen": "s_136-3",
       "estimated": true,
-      "name": "willi",
+      "name": "ck",
       "previous_names": [],
       "role": "member"
-    },
-    "RQJRQU09G": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Goltoro",
-      "previous_names": [],
-      "role": "coLeader"
-    },
-    "Q2JG08C8": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "ач лол 大",
-      "previous_names": [],
-      "role": "member"
-    },
-    "V8LURPPU0": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Biene",
-      "previous_names": [],
-      "role": "coLeader"
     },
     "P2Y80G28R": {
       "new": true,
@@ -375,12 +229,145 @@
       "name": "Gfb1907",
       "role": "member"
     },
-    "LPGPRPRL8": {
+    "JGJV9JCL": {
+      "new": true,
+      "since": "s_136-4",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "Ado47",
+      "previous_names": [],
+      "role": "member"
+    },
+    "9JGVP90J": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Lurox",
+      "previous_names": [],
+      "role": "member"
+    },
+    "2C2C9YLYG": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Maxi",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "PUV22QRR": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Da Bomba",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "RJJUQYQVP": {
+      "new": true,
+      "since": "s_136-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "willi",
+      "previous_names": [],
+      "role": "member"
+    },
+    "GPGRCP0C9": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Vollpfosten",
+      "previous_names": [],
+      "role": "member"
+    },
+    "YYYLVYL29": {
       "new": true,
       "since": "s_136-2",
       "first_seen": "s_136-3",
       "estimated": true,
-      "name": "mourise",
+      "name": "-_-",
+      "previous_names": [],
+      "role": "member"
+    },
+    "8U2UPVJR": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "MonkeyD.Ruffy",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "RVYG9R88L": {
+      "new": true,
+      "since": "s_135-1",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "Schokopudding",
+      "previous_names": [],
+      "role": "member"
+    },
+    "200YPRQ8L8": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Horus",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "P0RV9V9JQ": {
+      "new": true,
+      "since": "s_137-2",
+      "first_seen": "s_137-1",
+      "estimated": true,
+      "previous_names": [],
+      "name": "Franky",
+      "role": "coLeader"
+    },
+    "PUCRRVUY9": {
+      "new": true,
+      "since": "s_136-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "lochnessi",
+      "previous_names": [],
+      "role": "member"
+    },
+    "PPRC0VCLG": {
+      "new": true,
+      "since": "s_135-5",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "slob",
+      "previous_names": [],
+      "role": "member"
+    },
+    "CLYGY2Y00": {
+      "new": true,
+      "since": "s_136-4",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "henoch",
+      "previous_names": [],
+      "role": "member"
+    },
+    "CR2GQ2LJ8": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "mosquitox",
       "previous_names": [],
       "role": "elder"
     },
@@ -394,6 +381,65 @@
       "previous_names": [],
       "role": "elder"
     },
+    "L2Y22829P": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "unNa",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "U208GY9Q0": {
+      "new": true,
+      "since": "s_135-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "King Me",
+      "previous_names": [],
+      "role": "member"
+    },
+    "C8PV9V8": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Buschy",
+      "previous_names": [],
+      "role": "member"
+    },
+    "VJVV8JLJQ": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "MysticKnight",
+      "previous_names": [],
+      "role": "member"
+    },
+    "V8LURPPU0": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Biene",
+      "previous_names": [],
+      "role": "coLeader"
+    },
+    "Q2JG08C8": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "ач лол 大",
+      "previous_names": [],
+      "role": "member"
+    },
     "P0JGUCR8P": {
       "new": true,
       "since": "s_134-3",
@@ -401,24 +447,6 @@
       "estimated": true,
       "join_kind": "longstanding",
       "name": "HEXE OP",
-      "previous_names": [],
-      "role": "member"
-    },
-    "URY0PGQ2Y": {
-      "new": true,
-      "since": "s_137-1",
-      "first_seen": "s_136-4",
-      "estimated": true,
-      "previous_names": [],
-      "name": "tsch0sy",
-      "role": "member"
-    },
-    "J0V0UUYVG": {
-      "new": true,
-      "since": "s_136-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "ck",
       "previous_names": [],
       "role": "member"
     },
@@ -431,34 +459,6 @@
       "name": "Reinigungslord2",
       "previous_names": [],
       "role": "coLeader"
-    },
-    "200YPRQ8L8": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Horus",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "2Q8PVUPL": {
-      "new": true,
-      "since": "s_137-2",
-      "first_seen": "s_137-1",
-      "estimated": true,
-      "previous_names": [],
-      "name": "BREZZY",
-      "role": "member"
-    },
-    "J0GQYV2G": {
-      "new": true,
-      "since": "s_137-2",
-      "first_seen": "s_137-1",
-      "estimated": true,
-      "previous_names": [],
-      "name": "avery",
-      "role": "member"
     },
     "9CRQJVRGL": {
       "new": true,
@@ -477,6 +477,15 @@
       "join_kind": "longstanding",
       "name": "Grillinator",
       "previous_names": []
+    },
+    "2Q8PVUPL": {
+      "new": true,
+      "since": "s_137-2",
+      "first_seen": "s_137-1",
+      "estimated": true,
+      "previous_names": [],
+      "name": "BREZZY",
+      "role": "member"
     }
   },
   "week_end_dates": {
