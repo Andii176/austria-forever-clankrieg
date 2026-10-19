@@ -20,6 +20,7 @@ def snapshot(race, log, roster, checked_at):
         section=int(latest['sectionIndex']);season=int(latest['seasonId']);kind='Abgeschlossen'
     if clan['tag'].lstrip('#')!=CLAN:
         raise ValueError('Unexpected clan in current race')
+    rank = next((s.get('rank') for s in latest['standings'] if s['clan']['tag'].lstrip('#') == CLAN), None) if kind == 'Abgeschlossen' else None
     current={m['tag'] for m in roster['items']}
     players=[{'tag':p['tag'],'name':p['name'],'points':int(p.get('fame',0))+int(p.get('repairPoints',0)),
               'decks':int(p.get('decksUsed',0)), 'decksToday':int(p.get('decksUsedToday',0)),
@@ -28,7 +29,7 @@ def snapshot(race, log, roster, checked_at):
     if any(p['points']<0 or p['decks']<0 for p in players):
         raise ValueError('Invalid live race values')
     players.sort(key=lambda p:(-p['points'],-p['decks'],p['name']))
-    return {'week':f's_{season}-{section+1}','status':kind,'checkedAt':checked_at,
+    return {'week':f's_{season}-{section+1}','status':kind,'rank':rank,'checkedAt':checked_at,
             'points':sum(p['points'] for p in players),'decks':sum(p['decks'] for p in players),
             'players':players}
 
