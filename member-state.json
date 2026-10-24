@@ -1,6 +1,33 @@
 {
   "last_week": "s_137-2",
   "members": {
+    "URY0PGQ2Y": {
+      "new": true,
+      "since": "s_137-1",
+      "first_seen": "s_136-4",
+      "estimated": true,
+      "previous_names": [],
+      "name": "tsch0sy",
+      "role": "member"
+    },
+    "202YUPQVCL": {
+      "new": true,
+      "since": "s_136-1",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "EulaVxaM",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "V2P8CJ00Y": {
+      "new": true,
+      "since": null,
+      "first_seen": "s_137-2",
+      "estimated": true,
+      "previous_names": [],
+      "name": "langosch",
+      "role": "member"
+    },
     "VJYR0CCU2": {
       "new": true,
       "since": "s_134-3",
@@ -153,15 +180,6 @@
       "previous_names": [],
       "role": "member"
     },
-    "202YUPQVCL": {
-      "new": true,
-      "since": "s_136-1",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "EulaVxaM",
-      "previous_names": [],
-      "role": "elder"
-    },
     "J9U029LVC": {
       "new": true,
       "since": "s_134-3",
@@ -208,15 +226,6 @@
       "estimated": true,
       "name": "m4di",
       "previous_names": [],
-      "role": "member"
-    },
-    "URY0PGQ2Y": {
-      "new": true,
-      "since": "s_137-1",
-      "first_seen": "s_136-4",
-      "estimated": true,
-      "previous_names": [],
-      "name": "tsch0sy",
       "role": "member"
     },
     "RQJRQU09G": {
