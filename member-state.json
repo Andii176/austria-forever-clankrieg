@@ -1,15 +1,41 @@
 {
   "last_week": "s_137-2",
   "members": {
-    "L2PQC088U": {
+    "PLQ9GC0R": {
       "new": true,
-      "since": "s_134-3",
+      "since": "s_136-3",
       "first_seen": "s_136-3",
       "estimated": true,
-      "join_kind": "longstanding",
-      "name": "BP⚡️",
+      "name": "ZapMyPekka",
       "previous_names": [],
+      "role": "elder"
+    },
+    "P2Y80G28R": {
+      "new": true,
+      "since": "s_137-1",
+      "first_seen": "s_136-4",
+      "estimated": true,
+      "previous_names": [],
+      "name": "Gfb1907",
       "role": "member"
+    },
+    "LPGPRPRL8": {
+      "new": true,
+      "since": "s_136-2",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "mourise",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "202YUPQVCL": {
+      "new": true,
+      "since": "s_136-1",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "EulaVxaM",
+      "previous_names": [],
+      "role": "elder"
     },
     "VJYR0CCU2": {
       "new": true,
@@ -21,14 +47,15 @@
       "previous_names": [],
       "role": "leader"
     },
-    "PLQ9GC0R": {
+    "L2PQC088U": {
       "new": true,
-      "since": "s_136-3",
+      "since": "s_134-3",
       "first_seen": "s_136-3",
       "estimated": true,
-      "name": "ZapMyPekka",
+      "join_kind": "longstanding",
+      "name": "BP⚡️",
       "previous_names": [],
-      "role": "elder"
+      "role": "member"
     },
     "2J08GVQ20": {
       "new": true,
@@ -49,15 +76,6 @@
       "name": "ynsclk",
       "previous_names": [],
       "role": "coLeader"
-    },
-    "LPGPRPRL8": {
-      "new": true,
-      "since": "s_136-2",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "mourise",
-      "previous_names": [],
-      "role": "elder"
     },
     "P8GPU0U0": {
       "new": true,
@@ -107,15 +125,6 @@
       "previous_names": [],
       "role": "elder"
     },
-    "P2Y80G28R": {
-      "new": true,
-      "since": "s_137-1",
-      "first_seen": "s_136-4",
-      "estimated": true,
-      "previous_names": [],
-      "name": "Gfb1907",
-      "role": "member"
-    },
     "2R8JGP88": {
       "new": true,
       "since": "s_134-4",
@@ -124,15 +133,6 @@
       "name": "Malibu",
       "previous_names": [],
       "role": "member"
-    },
-    "202YUPQVCL": {
-      "new": true,
-      "since": "s_136-1",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "EulaVxaM",
-      "previous_names": [],
-      "role": "elder"
     },
     "CCJV028QU": {
       "new": true,
