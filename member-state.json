@@ -1,24 +1,14 @@
 {
   "last_week": "s_137-3",
   "members": {
-    "202YUPQVCL": {
+    "PLQ9GC0R": {
       "new": true,
-      "since": "s_136-1",
+      "since": "s_136-3",
       "first_seen": "s_136-3",
       "estimated": true,
-      "name": "EulaVxaM",
+      "name": "ZapMyPekka",
       "previous_names": [],
       "role": "elder"
-    },
-    "VJYR0CCU2": {
-      "new": true,
-      "since": "s_134-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "join_kind": "longstanding",
-      "name": "Andi176",
-      "previous_names": [],
-      "role": "leader"
     },
     "VPLR8G9RV": {
       "new": true,
@@ -40,15 +30,6 @@
       "previous_names": [],
       "role": "member"
     },
-    "2R8JGP88": {
-      "new": true,
-      "since": "s_134-4",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "Malibu",
-      "previous_names": [],
-      "role": "member"
-    },
     "LPGPRPRL8": {
       "new": true,
       "since": "s_136-2",
@@ -58,14 +39,33 @@
       "previous_names": [],
       "role": "elder"
     },
-    "PLQ9GC0R": {
+    "202YUPQVCL": {
       "new": true,
-      "since": "s_136-3",
+      "since": "s_136-1",
       "first_seen": "s_136-3",
       "estimated": true,
-      "name": "ZapMyPekka",
+      "name": "EulaVxaM",
       "previous_names": [],
       "role": "elder"
+    },
+    "VJYR0CCU2": {
+      "new": true,
+      "since": "s_134-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "join_kind": "longstanding",
+      "name": "Andi176",
+      "previous_names": [],
+      "role": "leader"
+    },
+    "2R8JGP88": {
+      "new": true,
+      "since": "s_134-4",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "Malibu",
+      "previous_names": [],
+      "role": "member"
     },
     "P2Y80G28R": {
       "new": true,
