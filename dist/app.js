@@ -150,7 +150,7 @@ function renderReview(){
  }).join('');
 }
 function setView(view){
- const views={clan:['statistics-view','overview-view'],members:['members-panel','members-view'],review:['review-panel','review-view']};
+ const views={clan:['statistics-view','overview-view'],members:['members-panel','members-view'],review:['review-panel','review-view'],visitors:['visitors-panel','visitors-view']};
  for(const [key,[panel,button]] of Object.entries(views)){
   document.querySelector('#'+panel).hidden=key!==view;
   document.querySelector('#'+button).setAttribute('aria-pressed',String(key===view));
@@ -195,8 +195,9 @@ async function start(){
  const maxPoints=Math.max(...data.trend.map(w=>w.points)),maxDecks=Math.max(...data.trend.map(w=>w.decks));
  const change=(value,prior)=>{if(!prior)return '<span class="muted">–</span>';const pct=(value/prior-1)*100;return `<span class="${pct>=0?'positive':'negative'}">${pct>=0?'+':''}${pct.toLocaleString('de-AT',{maximumFractionDigits:1})} %</span>`};
  document.querySelector('#week-rows').innerHTML=data.trend.map((w,i)=>{const prior=data.trend[i+1];return `<div class="result-row ${i===0?'latest':''}" role="row"><div class="week-cell" role="cell"><strong>${escapeHTML(w.week.replace('s_','Saison ').replace('-',' · CW '))}</strong>${i===0?'<small>Aktuellster CW</small>':''}</div><div class="measure" role="cell"><strong>${fmt.format(w.points)}</strong><div class="track"><span class="points-fill" style="width:${(w.points/maxPoints*100).toFixed(1)}%"></span></div></div><div class="measure" role="cell"><strong>${fmt.format(w.decks)}</strong><div class="track"><span class="decks-fill" style="width:${(w.decks/maxDecks*100).toFixed(1)}%"></span></div></div><div class="change-cell" role="cell"><span>Punkte ${prior?change(w.points,prior.points):'–'}</span><span>Decks ${prior?change(w.decks,prior.decks):'–'}</span></div></div>`}).join('');
- renderReview();renderPodiums();document.querySelector('#overview-view').addEventListener('click',()=>setView('clan'));document.querySelector('#members-view').addEventListener('click',()=>setView('members'));document.querySelector('#review-view').addEventListener('click',()=>setView('review'));
+ renderReview();renderPodiums();document.querySelector('#overview-view').addEventListener('click',()=>setView('clan'));document.querySelector('#members-view').addEventListener('click',()=>setView('members'));document.querySelector('#review-view').addEventListener('click',()=>setView('review'));document.querySelector('#visitors-view').addEventListener('click',()=>setView('visitors'));
  document.querySelector('#search').addEventListener('input',render);document.querySelector('#sort').addEventListener('change',render);render();
 }
 start().catch(()=>{document.querySelector('#rows').innerHTML='<tr><td colspan="8">Die Statistik konnte gerade nicht geladen werden.</td></tr>'});
+
 

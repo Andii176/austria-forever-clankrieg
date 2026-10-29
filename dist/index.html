@@ -7,7 +7,7 @@
   <meta name="description" content="Aktuelle Clankrieg-Statistik von Austria forever: zeitgewichtetes Ranking, Teilnahme und Wochenverlauf.">
   <title>Clankrieg · Austria forever</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=update-header-18">
+  <link rel="stylesheet" href="style.css?v=visitor-statistics-20">
 </head>
 <body>
   <main class="shell">
@@ -16,7 +16,7 @@
       <aside class="update update-status" aria-label="Aktualisierungen"><div class="update-card"><span class="update-label">Zuletzt aktualisiert</span><time id="updated-at">Wird geladen…</time><span class="update-detail">Aktueller Datenstand</span></div><div class="update-card update-card-next"><span class="update-label">Nächste Aktualisierung</span><time id="next-update">Wird ermittelt…</time><span class="update-detail" id="next-update-type">Geplant</span></div></aside>
     </header>
 
-    <nav class="view-nav" aria-label="Ansicht"><button type="button" id="overview-view" aria-pressed="true">Clanstatistik</button><button type="button" id="members-view" aria-pressed="false">Mitgliederstatistik</button><button type="button" id="review-view" aria-pressed="false">Gefährdet & Beobachtung</button><a class="discord-invite" href="https://discord.gg/anFQRAbAz" target="_blank" rel="noopener noreferrer">Discord beitreten <span aria-hidden="true">↗</span></a></nav>
+    <nav class="view-nav" aria-label="Ansicht"><button type="button" id="overview-view" aria-pressed="true">Clanstatistik</button><button type="button" id="members-view" aria-pressed="false">Mitgliederstatistik</button><button type="button" id="review-view" aria-pressed="false">Gefährdet & Beobachtung</button><button type="button" id="visitors-view" aria-pressed="false">Besucher</button><a class="discord-invite" href="https://discord.gg/anFQRAbAz" target="_blank" rel="noopener noreferrer">Discord beitreten <span aria-hidden="true">↗</span></a></nav>
 
     <section class="clan-principles" aria-labelledby="principles-title">
       <span class="eyebrow">UNSER LEITSATZ</span>
@@ -87,9 +87,20 @@
     </section>
 
 
+    <section class="panel" id="visitors-panel" aria-labelledby="visitors-title" hidden>
+      <div class="section-head"><div><span class="eyebrow">WEBSEITE</span><h2 id="visitors-title">Besucherstatistik</h2></div></div>
+      <div class="method-body">
+        <p id="visitor-status" role="status">Besucherstatistik wird geladen …</p>
+        <div id="visitor-metrics" hidden></div>
+        <p>Geschätzte Besucher pro Tag, keine Spielerzählung: Ein täglich wechselnder Prüfwert aus IP-Adresse und Browserkennung erkennt wiederholte Besuche. Die Ausgangswerte werden dafür nicht gespeichert, die Prüfwerte nach spätestens etwa 27 Stunden gelöscht. Gerätewechsel können mehrfach zählen; Personen im selben Netzwerk mit gleichem Browser können zusammenfallen.</p>
+        <p>Ohne Cookies oder Browser-Speicher. „Do Not Track“ und „Global Privacy Control“ werden berücksichtigt. Tageszählungen bleiben bis zu 90 Tage gespeichert. Die Statistik ist öffentlich; Spielernamen werden nicht erfasst.</p>
+      </div>
+    </section>
     <footer>Austria forever · #QY2CRJUQ</footer>
   </main>
   <script src="config.js?v=update-header-18"></script>
-  <script src="app.js?v=update-header-18" defer></script>
+  <script src="analytics.js?v=visitor-statistics-20" defer></script>
+  <script src="app.js?v=visitor-statistics-20" defer></script>
 </body>
 </html>
+

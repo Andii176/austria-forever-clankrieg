@@ -51,6 +51,7 @@ export class MembershipStore{
  async fetch(request){
   try{
    const url=new URL(request.url);
+   if(url.pathname==='/analytics')return await analytics(this.ctx,request);
    if(request.method==='GET')return json([...(await this.ctx.storage.list({prefix:'member:'})).values()]);
    if(request.method!=='PUT')return json({error:'Nicht unterstützt.'},405);
    const input=validate(await readSmall(request));
@@ -75,16 +76,32 @@ export class MembershipStore{
    return json({saved:true,record:outcome.record});
   }catch(error){return json({error:error.message},400);}
  }
- async alarm(){for(const [key,value] of await this.ctx.storage.list({prefix:'rate:'}))if(value.until<=Date.now())await this.ctx.storage.delete(key);}
+ async alarm(){
+  const now=Date.now();
+  for(const prefix of ['rate:','visitor:'])for(const [key,value] of await this.ctx.storage.list({prefix}))if(value.until<=now)await this.ctx.storage.delete(key);
+  const cutoff=analyticsDay(new Date(now-89*86400000));
+  for(const [key]of await this.ctx.storage.list({prefix:'analytics-day:'}))if(key.slice(14)<cutoff)await this.ctx.storage.delete(key);
+  if((await this.ctx.storage.list({prefix:'visitor:'})).size)await this.ctx.storage.setAlarm(now+3600000);
+ }
 }
 export default{
  async fetch(request,env){
   const origin=request.headers.get('Origin'),allowed=env.ALLOWED_ORIGIN;
   if(origin&&origin!==allowed)return json({error:'Nicht erlaubte Seite.'},403);
-  const cors={'Access-Control-Allow-Origin':allowed,'Vary':'Origin','Access-Control-Allow-Methods':'GET, PUT, OPTIONS','Access-Control-Allow-Headers':'Content-Type','Cache-Control':'no-store'};
+  const cors={'Access-Control-Allow-Origin':allowed,'Vary':'Origin','Access-Control-Allow-Methods':'GET, PUT, POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type','Cache-Control':'no-store'};
   const wrap=response=>{const headers=new Headers(response.headers);for(const [key,value] of Object.entries(cors))headers.set(key,value);return new Response(response.body,{status:response.status,headers});};
   if(request.method==='OPTIONS')return wrap(new Response(null,{status:204}));
   const path=new URL(request.url).pathname;
+  if(path==='/api/analytics'&&['GET','POST'].includes(request.method)){
+   if(request.method==='POST'&&origin!==allowed)return wrap(json({error:'Nicht erlaubte Seite.'},403));
+   const store=env.MEMBERSHIPS.get(env.MEMBERSHIPS.idFromName('austria-forever-analytics'));
+   const headers=new Headers();
+   if(request.headers.get('CF-Connecting-IP'))headers.set('CF-Connecting-IP',request.headers.get('CF-Connecting-IP'));
+   headers.set('User-Agent',request.headers.get('User-Agent')??'');
+   const optedOut=request.headers.get('DNT')==='1'||request.headers.get('Sec-GPC')==='1';
+   const bot=request.cf?.botManagement?.verifiedBot||/bot|crawler|spider|headless/i.test(request.headers.get('User-Agent')??'');
+   return wrap(await store.fetch(new Request('https://internal/analytics',{method:optedOut||bot?'GET':request.method,headers})));
+  }
   const store=env.MEMBERSHIPS.get(env.MEMBERSHIPS.idFromName('austria-forever'));
   if(path==='/api/memberships'&&request.method==='PUT'){
    if(origin!==allowed)return wrap(json({error:'Bitte das Formular auf der Clanwebseite verwenden.'},403));
@@ -100,3 +117,33 @@ export default{
   return wrap(json({error:'Nicht gefunden.'},404));
  }
 };
+
+
+export const analyticsDay=(now=new Date())=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Vienna'}).format(now);
+export async function analytics(ctx,request,now=new Date()){
+ const day=analyticsDay(now),key='analytics-day:'+day;
+ for(const [key,value]of await ctx.storage.list({prefix:'visitor:'}))if(value.until<=now.getTime())await ctx.storage.delete(key);
+ const cutoff=analyticsDay(new Date(now.getTime()-89*86400000));
+ for(const [key]of await ctx.storage.list({prefix:'analytics-day:'}))if(key.slice(14)<cutoff)await ctx.storage.delete(key);
+ if(request.method==='POST'&&request.headers.get('CF-Connecting-IP')){
+  await ctx.storage.transaction(async tx=>{
+   let salt=await tx.get('analytics-salt');
+   if(salt?.day!==day){salt={day,value:crypto.randomUUID()};await tx.put({'analytics-salt':salt});}
+   const identity=salt.value+'|'+request.headers.get('CF-Connecting-IP')+'|'+(request.headers.get('User-Agent')??'').slice(0,512);
+   const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(identity));
+   const visitorKey='visitor:'+day+':'+Array.from(new Uint8Array(bytes)).map(b=>b.toString(16).padStart(2,'0')).join('');
+   const seen=await tx.get(visitorKey),time=now.getTime();
+   // Ignore rapid reloads; the page sends one event per page load, never polling events.
+   if(seen&&time-seen.last<10000)return;
+   const row=await tx.get(key)??{date:day,views:0,visitors:0};
+   row.views++;if(!seen)row.visitors++;
+   await tx.put({[key]:row,[visitorKey]:{last:time,until:time+26*3600000},'analytics-start':await tx.get('analytics-start')??day});
+  });
+  await ctx.storage.setAlarm(now.getTime()+3600000);
+ }
+ const rows=await ctx.storage.list({prefix:'analytics-day:'}),days=[];
+ // Midday UTC stays on the same Vienna date across both DST transitions.
+ const anchor=new Date(day+'T12:00:00Z');
+ for(let i=0;i<30;i++){const date=analyticsDay(new Date(anchor.getTime()-i*86400000));days.push(rows.get('analytics-day:'+date)??{date,views:0,visitors:0});}
+ return json({startedAt:await ctx.storage.get('analytics-start')??null,today:days[0],views7:days.slice(0,7).reduce((n,d)=>n+d.views,0),views30:days.reduce((n,d)=>n+d.views,0),days});
+}

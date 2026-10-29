@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import worker,{MembershipStore,overlay,validate} from './worker.mjs';
+import worker,{MembershipStore,overlay,validate,analytics} from './worker.mjs';
 const snapshot=JSON.parse(readFileSync(new URL('./fixture.json',import.meta.url)));
 const person=(data,tag)=>data.players.find(p=>p.tag==='#'+tag);
 test('anonymous date edits include later zero weeks and retain clan totals',()=>{
@@ -26,6 +26,32 @@ function context(){
  storage.transaction=fn=>{const promise=queue.then(()=>fn(storage));queue=promise.catch(()=>{});return promise;};
  return {storage};
 }
+test('analytics counts daily visitors, ignores rapid reloads and persists across instances',async()=>{
+ const ctx=context();
+ const request=(ip='192.0.2.1')=>new Request('https://internal/analytics',{method:'POST',headers:{'CF-Connecting-IP':ip,'User-Agent':'Browser'}});
+ const count=async(time,ip)=>await (await analytics(ctx,request(ip),new Date(time))).json();
+ let data=await count('2026-10-29T12:00:00Z');
+ assert.deepEqual(data.today,{date:'2026-10-29',views:1,visitors:1});
+ data=await count('2026-10-29T12:00:02Z');assert.equal(data.today.views,1);
+ data=await count('2026-10-29T12:01:00Z');assert.equal(data.today.views,2);assert.equal(data.today.visitors,1);
+ data=await count('2026-10-29T12:02:00Z','192.0.2.2');assert.equal(data.today.visitors,2);
+ data=await count('2026-10-30T12:00:00Z');assert.equal(data.today.visitors,1);assert.equal(data.views7,4);
+ const restored=new MembershipStore(ctx,{});
+ const read=await(await restored.fetch(new Request('https://internal/analytics'))).json();assert.ok(read.startedAt);
+ const stored=JSON.stringify([...(await ctx.storage.list({prefix:''}))]);
+ assert.ok(!stored.includes('192.0.2.'));assert.ok(!stored.includes('Browser'));
+ await analytics(ctx,new Request('https://internal/analytics'),new Date('2027-02-01T12:00:00Z'));
+ assert.equal((await ctx.storage.list({prefix:'visitor:'})).size,0);
+ assert.equal((await ctx.storage.list({prefix:'analytics-day:'})).size,0);
+});
+test('analytics rejects foreign writes and respects DNT and GPC',async()=>{
+ const forwarded=[];
+ const env={ALLOWED_ORIGIN:'https://andii176.github.io',MEMBERSHIPS:{idFromName:n=>n,get:()=>({fetch:async r=>{forwarded.push(r);return new Response('{}');}})}};
+ const send=headers=>worker.fetch(new Request('https://worker/api/analytics',{method:'POST',headers}),env);
+ assert.equal((await send({Origin:'https://other.example'})).status,403);assert.equal(forwarded.length,0);
+ for(const option of [{DNT:'1'},{'Sec-GPC':'1'},{}])await send({Origin:env.ALLOWED_ORIGIN,'CF-Connecting-IP':'192.0.2.1','User-Agent':'Browser',...option});
+ assert.deepEqual(forwarded.map(r=>r.method),['GET','GET','POST']);
+});
 test('no login required; saves are persistent and conflicting edits are rejected',async()=>{
  const ctx=context(),store=new MembershipStore(ctx,{});
  const put=(version,date)=>store.fetch(new Request('https://internal/api/memberships',{method:'PUT',body:JSON.stringify({tag:'LPGPRPRL8',kind:'date',date,version}),headers:{'CF-Connecting-IP':'127.0.0.1'}}));
@@ -48,3 +74,4 @@ test('automatic detection is visible and later manual correction replaces its so
  const manual=overlay(snapshot,[{tag:'#LPGPRPRL8',kind:'date',date:'2026-09-14',version:2,source:'manual',detectedAt:null}]);
  assert.equal(person(manual,'LPGPRPRL8').joinSource,'manual');
 });
+
