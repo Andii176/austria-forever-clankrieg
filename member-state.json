@@ -1,6 +1,51 @@
 {
   "last_week": "s_137-3",
   "members": {
+    "22P09PRCV": {
+      "new": true,
+      "since": "s_135-5",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "m4di",
+      "previous_names": [],
+      "role": "member"
+    },
+    "PLQ9GC0R": {
+      "new": true,
+      "since": "s_136-3",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "ZapMyPekka",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "LPGPRPRL8": {
+      "new": true,
+      "since": "s_136-2",
+      "first_seen": "s_136-3",
+      "estimated": true,
+      "name": "mourise",
+      "previous_names": [],
+      "role": "elder"
+    },
+    "PCRJUJ9LQ": {
+      "new": true,
+      "since": null,
+      "first_seen": "s_137-3",
+      "estimated": true,
+      "previous_names": [],
+      "name": "Alex727",
+      "role": "member"
+    },
+    "YYYQ0UG8": {
+      "new": true,
+      "since": null,
+      "first_seen": "s_137-3",
+      "estimated": true,
+      "previous_names": [],
+      "name": "豪爾赫",
+      "role": "member"
+    },
     "2R8JGP88": {
       "new": true,
       "since": "s_134-4",
@@ -17,24 +62,6 @@
       "estimated": true,
       "previous_names": [],
       "name": "stay humble",
-      "role": "member"
-    },
-    "22P09PRCV": {
-      "new": true,
-      "since": "s_135-5",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "m4di",
-      "previous_names": [],
-      "role": "member"
-    },
-    "PCRJUJ9LQ": {
-      "new": true,
-      "since": null,
-      "first_seen": "s_137-3",
-      "estimated": true,
-      "previous_names": [],
-      "name": "Alex727",
       "role": "member"
     },
     "UVJGVQ8VG": {
@@ -55,24 +82,6 @@
       "name": "Andi176",
       "previous_names": [],
       "role": "leader"
-    },
-    "PLQ9GC0R": {
-      "new": true,
-      "since": "s_136-3",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "ZapMyPekka",
-      "previous_names": [],
-      "role": "elder"
-    },
-    "LPGPRPRL8": {
-      "new": true,
-      "since": "s_136-2",
-      "first_seen": "s_136-3",
-      "estimated": true,
-      "name": "mourise",
-      "previous_names": [],
-      "role": "elder"
     },
     "P2Y80G28R": {
       "new": true,
@@ -266,15 +275,6 @@
       "previous_names": [],
       "role": "elder"
     },
-    "YYYQ0UG8": {
-      "new": true,
-      "since": null,
-      "first_seen": "s_137-3",
-      "estimated": true,
-      "previous_names": [],
-      "name": "豪爾赫",
-      "role": "member"
-    },
     "YYYLVYL29": {
       "new": true,
       "since": "s_136-2",
@@ -371,15 +371,6 @@
       "previous_names": [],
       "role": "member"
     },
-    "29LCG08R": {
-      "new": true,
-      "since": "s_137-3",
-      "first_seen": "s_137-2",
-      "estimated": true,
-      "previous_names": [],
-      "name": "Aut_Fabi",
-      "role": "member"
-    },
     "8UQ9CQQJU": {
       "new": true,
       "since": null,
@@ -387,6 +378,15 @@
       "estimated": true,
       "previous_names": [],
       "name": "bozoo",
+      "role": "member"
+    },
+    "29LCG08R": {
+      "new": true,
+      "since": "s_137-3",
+      "first_seen": "s_137-2",
+      "estimated": true,
+      "previous_names": [],
+      "name": "Aut_Fabi",
       "role": "member"
     },
     "PPRC0VCLG": {
